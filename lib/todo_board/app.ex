@@ -5,10 +5,12 @@ defmodule TodoBoard.App do
 
   @behaviour Ratatouille.App
 
+  import Ratatouille.Constants, only: [attribute: 1, color: 1, key: 1]
+
   import Ratatouille.View
 
   alias Ratatouille.Runtime.Command
-  alias TodoBoard.Model
+  alias TodoBoard.{Model, TodoPanel}
 
   @todo_file_path Application.get_env(:todo_board, :todo_file)
 
@@ -18,6 +20,7 @@ defmodule TodoBoard.App do
       debug_overlay: false,
       selected_tab: :priority,
       todos: [],
+      todo_panels: [],
       window: window
     }
 
@@ -39,6 +42,22 @@ defmodule TodoBoard.App do
       {:event, %{ch: ?m}} ->
         %{model | debug_overlay: not model.debug_overlay}
 
+      {:event, %{ch: ?p}} ->
+        panel_elements = Enum.map(model.todos, fn todo -> %TodoPanel.Element{todo: todo} end)
+
+        new_todo_panel = %TodoPanel{elements: panel_elements, selected: false}
+
+        %{model | todo_panels: [new_todo_panel | model.todo_panels]}
+
+      {:event, %{ch: ?x}} ->
+        new_todo_panels =
+          case model.todo_panels do
+            [] -> model.todo_panels
+            [_ | rest] -> rest
+          end
+
+        %{model | todo_panels: new_todo_panels}
+
       _msg ->
         model
     end
@@ -46,14 +65,18 @@ defmodule TodoBoard.App do
 
   @impl true
   def render(model) do
+    panel_height = even_vertical_split_panel_height(model)
+
     view do
       row do
         column(size: 12) do
-          panel(title: "TODOs", height: :fill) do
-            table do
-              for todo_line <- model.todos do
-                table_row do
-                  table_cell(content: todo_line)
+          for todo_panel <- model.todo_panels do
+            panel(title: "TODOs", height: panel_height, color: :red) do
+              table do
+                for element <- todo_panel.elements do
+                  table_row do
+                    table_cell(content: element.todo)
+                  end
                 end
               end
             end
@@ -63,6 +86,15 @@ defmodule TodoBoard.App do
 
       debug_overlay(model)
     end
+  end
+
+  defp even_vertical_split_panel_height(%Model{todo_panels: []}), do: nil
+
+  defp even_vertical_split_panel_height(%Model{
+         todo_panels: todo_panels,
+         window: %{height: window_height}
+       }) do
+    floor(window_height / length(todo_panels))
   end
 
   defp debug_overlay(%Model{debug_overlay: false}), do: nil

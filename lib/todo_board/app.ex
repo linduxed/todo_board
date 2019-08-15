@@ -16,11 +16,14 @@ defmodule TodoBoard.App do
 
   @arrow_up key(:arrow_up)
   @arrow_down key(:arrow_down)
+  @enter key(:enter)
+  @escape key(:esc)
 
   @impl true
   def init(%{window: window}) do
     model = %Model{
       debug_overlay: false,
+      panel_selected?: false,
       selected_tab: :priority,
       todos: [],
       todo_panels: [],
@@ -44,6 +47,21 @@ defmodule TodoBoard.App do
 
       {_model, {:event, %{ch: ?m}}} ->
         %{model | debug_overlay: not model.debug_overlay}
+
+      {%{panel_selected?: false}, {:event, %{key: @enter}}} ->
+        panels_with_hovered_panel_selected =
+          Enum.map(model.todo_panels, fn
+            todo_panel = %{hover: true} -> %{todo_panel | selected: true}
+            todo_panel -> todo_panel
+          end)
+
+        %{model | panel_selected?: true, todo_panels: panels_with_hovered_panel_selected}
+
+      {%{panel_selected?: true}, {:event, %{key: @escape}}} ->
+        panels_no_selected =
+          Enum.map(model.todo_panels, & %{&1 | selected: false})
+
+        %{model | panel_selected?: true, todo_panels: panels_no_selected}
 
       {_model, {:event, %{ch: ?p}}} ->
         panel_elements = Enum.map(model.todos, fn todo -> %TodoPanel.Element{todo: todo} end)
@@ -122,6 +140,7 @@ defmodule TodoBoard.App do
     "TODOs: #{length(elements)}"
   end
 
+  defp panel_color(%TodoPanel{selected: true}), do: :green
   defp panel_color(%TodoPanel{hover: true}), do: :red
   defp panel_color(%TodoPanel{hover: _}), do: nil
 

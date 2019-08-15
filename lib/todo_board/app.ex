@@ -15,7 +15,7 @@ defmodule TodoBoard.App do
   @impl true
   def init(%{window: window}) do
     model = %Model{
-      overlay: nil,
+      debug_overlay: false,
       selected_tab: :priority,
       todos: [],
       window: window
@@ -32,6 +32,9 @@ defmodule TodoBoard.App do
     case msg do
       {:todo_file_read, todo_lines} ->
         %{model | todos: todo_lines}
+
+      {:event, %{ch: ?m}} ->
+        %{model | debug_overlay: not model.debug_overlay}
 
       _msg ->
         model
@@ -53,6 +56,33 @@ defmodule TodoBoard.App do
             end
           end
         end
+      end
+
+      debug_overlay(model)
+    end
+  end
+
+  defp debug_overlay(%Model{debug_overlay: false}), do: nil
+
+  defp debug_overlay(model = %Model{debug_overlay: true}) do
+    padding = 5
+    overlay_border_width = 1
+
+    overlay_height =
+      model.window.height -
+        2 * padding -
+        2 * overlay_border_width
+
+    truncated_model =
+      model
+      |> inspect(pretty: true)
+      |> String.split("\n")
+      |> Enum.take(overlay_height)
+      |> Enum.join("\n")
+
+    overlay(padding: padding) do
+      panel(title: "Model data") do
+        label(content: truncated_model)
       end
     end
   end

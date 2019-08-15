@@ -216,7 +216,7 @@ defmodule TodoBoard.App do
     end
   end
 
-  defp read_todo_file_lines() do
+  defp read_todo_file_lines do
     @todo_file_path
     |> File.read!()
     |> String.split("\n")

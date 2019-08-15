@@ -24,7 +24,6 @@ defmodule TodoBoard.App do
     model = %Model{
       debug_overlay: false,
       panel_selected?: false,
-      selected_tab: :priority,
       todos: [],
       todo_panels: [],
       window: window

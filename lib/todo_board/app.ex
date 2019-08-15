@@ -14,6 +14,9 @@ defmodule TodoBoard.App do
 
   @todo_file_path Application.get_env(:todo_board, :todo_file)
 
+  @arrow_up key(:arrow_up)
+  @arrow_down key(:arrow_down)
+
   @impl true
   def init(%{window: window}) do
     model = %Model{
@@ -45,18 +48,41 @@ defmodule TodoBoard.App do
       {:event, %{ch: ?p}} ->
         panel_elements = Enum.map(model.todos, fn todo -> %TodoPanel.Element{todo: todo} end)
 
-        new_todo_panel = %TodoPanel{elements: panel_elements, selected: false}
+        new_todo_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
 
-        %{model | todo_panels: [new_todo_panel | model.todo_panels]}
+        current_todo_panels =
+          Enum.map(model.todo_panels, fn todo_panel ->
+            %{todo_panel | hover: false}
+          end)
+
+        %{model | todo_panels: [new_todo_panel | current_todo_panels]}
 
       {:event, %{ch: ?x}} ->
         new_todo_panels =
           case model.todo_panels do
-            [] -> model.todo_panels
-            [_ | rest] -> rest
+            [] ->
+              []
+
+            [_single_panel] ->
+              []
+
+            [%TodoPanel{hover: true} | [first_remaining_panel | rest]] ->
+              [%{first_remaining_panel | hover: true} | rest]
+
+            [_dropped_panel | rest] ->
+              rest
           end
 
         %{model | todo_panels: new_todo_panels}
+
+      {:event, %{key: key}} when key in [@arrow_down, @arrow_up] ->
+        todo_panels =
+          case key do
+            @arrow_down -> panel_hover_shift_forward(model.todo_panels)
+            @arrow_up -> panel_hover_shift_backward(model.todo_panels)
+          end
+
+        %{model | todo_panels: todo_panels}
 
       _msg ->
         model
@@ -71,7 +97,11 @@ defmodule TodoBoard.App do
       row do
         column(size: 12) do
           for todo_panel <- model.todo_panels do
-            panel(title: "TODOs", height: panel_height, color: :red) do
+            panel(
+              title: panel_title(todo_panel),
+              height: panel_height,
+              color: panel_color(todo_panel)
+            ) do
               table do
                 for element <- todo_panel.elements do
                   table_row do
@@ -88,6 +118,13 @@ defmodule TodoBoard.App do
     end
   end
 
+  defp panel_title(%TodoPanel{elements: elements}) do
+    "TODOs: #{length(elements)}"
+  end
+
+  defp panel_color(%TodoPanel{hover: true}), do: :red
+  defp panel_color(%TodoPanel{hover: _}), do: nil
+
   defp even_vertical_split_panel_height(%Model{todo_panels: []}), do: nil
 
   defp even_vertical_split_panel_height(%Model{
@@ -95,6 +132,39 @@ defmodule TodoBoard.App do
          window: %{height: window_height}
        }) do
     floor(window_height / length(todo_panels))
+  end
+
+  defp panel_hover_shift_forward(todo_panels) do
+    panel_hover_shift(todo_panels)
+  end
+
+  defp panel_hover_shift_backward(todo_panels) do
+    todo_panels
+    |> Enum.reverse()
+    |> panel_hover_shift()
+    |> Enum.reverse()
+  end
+
+  defp panel_hover_shift(todo_panels) do
+    panel_hover_shift(todo_panels, false)
+  end
+
+  defp panel_hover_shift(_todo_panels = [], _last_was_hover), do: []
+
+  defp panel_hover_shift(todo_panels = [%TodoPanel{hover: true}], _last_was_hover = false) do
+    todo_panels
+  end
+
+  defp panel_hover_shift([head = %TodoPanel{hover: false} | tail], _last_was_hover = false) do
+    [head | panel_hover_shift(tail, false)]
+  end
+
+  defp panel_hover_shift([head = %TodoPanel{hover: true} | tail], _last_was_hover = false) do
+    [%{head | hover: false} | panel_hover_shift(tail, _last_was_hover = true)]
+  end
+
+  defp panel_hover_shift([head = %TodoPanel{hover: false} | tail], _last_was_hover = true) do
+    [%{head | hover: true} | panel_hover_shift(tail, _last_was_hover = false)]
   end
 
   defp debug_overlay(%Model{debug_overlay: false}), do: nil

@@ -30,6 +30,9 @@ defmodule TodoBoard.App do
   @impl true
   def update(model, msg) do
     case msg do
+      {:resize, %{h: height, w: width}} ->
+        %{model | window: %{height: height, width: width}}
+
       {:todo_file_read, todo_lines} ->
         %{model | todos: todo_lines}
 

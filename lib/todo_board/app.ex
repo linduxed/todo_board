@@ -75,11 +75,8 @@ defmodule TodoBoard.App do
       {_model, {:event, %{ch: ?x}}} ->
         new_todo_panels =
           case model.todo_panels do
-            [] ->
-              []
-
-            [_single_panel] ->
-              []
+            [single_panel] ->
+              [single_panel]
 
             [%TodoPanel{hover: true} | [first_remaining_panel | rest]] ->
               [%{first_remaining_panel | hover: true} | rest]

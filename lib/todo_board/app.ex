@@ -1,6 +1,17 @@
 defmodule TodoBoard.App do
   @moduledoc """
   The Ratatouille application
+
+  The application makes a couple assumptions about the model contents. These
+  assumptions are generally not checked, so if something is wrong then the
+  application may crash.
+
+  Checks and tests should maybe be added later, but for now the programmer
+  simply has to keep these assumptions in mind when modifying the code.
+
+    * There is always at least one TODO panel present.
+    * Only one of the panels can have the `hover` key set to `true`.
+    * Only one of the panels can have the `selected` key set to `true`.
   """
 
   @behaviour Ratatouille.App

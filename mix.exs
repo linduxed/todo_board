@@ -7,7 +7,11 @@ defmodule TodoBoard.MixProject do
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      docs: [
+        main: "readme",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -21,6 +25,7 @@ defmodule TodoBoard.MixProject do
   defp deps do
     [
       {:credo, "~> 1.1", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.21.1", only: :dev, runtime: false},
       {:ratatouille, "~> 0.5.0"}
     ]
   end

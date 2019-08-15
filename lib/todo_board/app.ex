@@ -11,6 +11,7 @@ defmodule TodoBoard.App do
 
   alias Ratatouille.Runtime.Command
   alias TodoBoard.{Model, TodoPanel}
+  alias TodoBoard.App.Update
 
   @todo_file_path Application.get_env(:todo_board, :todo_file)
 
@@ -38,8 +39,8 @@ defmodule TodoBoard.App do
   @impl true
   def update(model, msg) do
     case {model, msg} do
-      {_model, {:resize, %{h: height, w: width}}} ->
-        %{model | window: %{height: height, width: width}}
+      {_model, {:resize, resize_data}} ->
+        Update.window_resize(model, resize_data)
 
       {_model, {:todo_file_read, todo_lines}} ->
         %{model | todos: todo_lines}

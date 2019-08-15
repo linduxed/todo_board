@@ -44,7 +44,7 @@ defmodule TodoBoard.App do
 
     model = %Model{
       debug_overlay: false,
-      panel_selected?: false,
+      mode: :normal,
       todos: todos,
       todo_panels: [],
       window: window
@@ -65,19 +65,19 @@ defmodule TodoBoard.App do
       {_model, {:event, %{ch: ?m}}} ->
         %{model | debug_overlay: not model.debug_overlay}
 
-      {%{panel_selected?: false}, {:event, %{key: @enter}}} ->
+      {%{mode: :normal}, {:event, %{key: @enter}}} ->
         panels_with_hovered_panel_selected =
           Enum.map(model.todo_panels, fn
             todo_panel = %{hover: true} -> %{todo_panel | selected: true}
             todo_panel -> todo_panel
           end)
 
-        %{model | panel_selected?: true, todo_panels: panels_with_hovered_panel_selected}
+        %{model | mode: :panel_selected, todo_panels: panels_with_hovered_panel_selected}
 
-      {%{panel_selected?: true}, {:event, %{key: @escape}}} ->
+      {%{mode: :panel_selected}, {:event, %{key: @escape}}} ->
         panels_no_selected = Enum.map(model.todo_panels, &%{&1 | selected: false})
 
-        %{model | panel_selected?: false, todo_panels: panels_no_selected}
+        %{model | mode: :normal, todo_panels: panels_no_selected}
 
       {_model, {:event, %{ch: ?p}}} ->
         panel_elements = Enum.map(model.todos, &%TodoPanel.Element{todo: &1})

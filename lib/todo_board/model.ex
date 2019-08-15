@@ -1,6 +1,6 @@
 defmodule TodoBoard.Model do
   defstruct debug_overlay: false,
-            panel_selected?: false,
+            mode: :normal,
             todos: [],
             todo_panels: [],
             window: %{}

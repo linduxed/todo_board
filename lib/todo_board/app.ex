@@ -22,13 +22,20 @@ defmodule TodoBoard.App do
 
   @impl true
   def init(%{window: window}) do
+    todos = read_todo_file_lines()
+
     model = %Model{
       debug_overlay: false,
       panel_selected?: false,
-      todos: [],
+      todos: todos,
       todo_panels: [],
       window: window
     }
+
+    panel_elements = Enum.map(model.todos, fn todo -> %TodoPanel.Element{todo: todo} end)
+    starting_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
+
+    model = %{model | todo_panels: [starting_panel]}
 
     {
       model,

@@ -20,6 +20,7 @@ defmodule TodoBoard.MixProject do
 
   defp deps do
     [
+      {:credo, "~> 1.1", only: [:dev, :test], runtime: false},
       {:ratatouille, "~> 0.5.0"}
     ]
   end

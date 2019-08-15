@@ -1,6 +1,9 @@
 %{
   "asciichart": {:hex, :asciichart, "1.0.0", "6ef5dbeab545cb7a0bdce7235958f129de6cd8ad193684dc0953c9a8b4c3db5b", [:mix], [], "hexpm"},
+  "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], [], "hexpm"},
+  "credo": {:hex, :credo, "1.1.2", "02b6422f3e659eb74b05aca3c20c1d8da0119a05ee82577a82e6c2938bf29f81", [:mix], [{:bunt, "~> 0.2.0", [hex: :bunt, repo: "hexpm", optional: false]}, {:jason, "~> 1.0", [hex: :jason, repo: "hexpm", optional: false]}], "hexpm"},
   "elixir_make": {:hex, :elixir_make, "0.6.0", "38349f3e29aff4864352084fc736fa7fa0f2995a819a737554f7ebd28b85aaab", [:mix], [], "hexpm"},
   "ex_termbox": {:hex, :ex_termbox, "1.0.0", "6f26a0cdc787c0685732649beee6973248504fc689776cf57a485422be8dac4b", [:make, :mix], [{:elixir_make, "~> 0.4", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
+  "jason": {:hex, :jason, "1.1.2", "b03dedea67a99223a2eaf9f1264ce37154564de899fd3d8b9a21b1a6fd64afe7", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm"},
   "ratatouille": {:hex, :ratatouille, "0.5.0", "e843c2dbc0293438865361c4e4fecf5bab702563e490d67dee85edcabf15ac1d", [:mix], [{:asciichart, "~> 1.0", [hex: :asciichart, repo: "hexpm", optional: false]}, {:ex_termbox, "~> 1.0", [hex: :ex_termbox, repo: "hexpm", optional: false]}], "hexpm"},
 }

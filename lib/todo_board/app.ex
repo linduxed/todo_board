@@ -35,17 +35,17 @@ defmodule TodoBoard.App do
 
   @impl true
   def update(model, msg) do
-    case msg do
-      {:resize, %{h: height, w: width}} ->
+    case {model, msg} do
+      {_model, {:resize, %{h: height, w: width}}} ->
         %{model | window: %{height: height, width: width}}
 
-      {:todo_file_read, todo_lines} ->
+      {_model, {:todo_file_read, todo_lines}} ->
         %{model | todos: todo_lines}
 
-      {:event, %{ch: ?m}} ->
+      {_model, {:event, %{ch: ?m}}} ->
         %{model | debug_overlay: not model.debug_overlay}
 
-      {:event, %{ch: ?p}} ->
+      {_model, {:event, %{ch: ?p}}} ->
         panel_elements = Enum.map(model.todos, fn todo -> %TodoPanel.Element{todo: todo} end)
 
         new_todo_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
@@ -57,7 +57,7 @@ defmodule TodoBoard.App do
 
         %{model | todo_panels: [new_todo_panel | current_todo_panels]}
 
-      {:event, %{ch: ?x}} ->
+      {_model, {:event, %{ch: ?x}}} ->
         new_todo_panels =
           case model.todo_panels do
             [] ->
@@ -75,7 +75,7 @@ defmodule TodoBoard.App do
 
         %{model | todo_panels: new_todo_panels}
 
-      {:event, %{key: key}} when key in [@arrow_down, @arrow_up] ->
+      {_model, {:event, %{key: key}}} when key in [@arrow_down, @arrow_up] ->
         todo_panels =
           case key do
             @arrow_down -> panel_hover_shift_forward(model.todo_panels)
@@ -84,7 +84,7 @@ defmodule TodoBoard.App do
 
         %{model | todo_panels: todo_panels}
 
-      _msg ->
+      {_model, _msg} ->
         model
     end
   end

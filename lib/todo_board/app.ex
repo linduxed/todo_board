@@ -20,8 +20,8 @@ defmodule TodoBoard.App do
 
   import Ratatouille.View
 
-  alias TodoBoard.{Model, TodoPanel}
   alias TodoBoard.App.Update
+  alias TodoBoard.{Model, TodoPanel}
 
   @todo_file_path Application.get_env(:todo_board, :todo_file)
 

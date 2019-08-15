@@ -58,14 +58,14 @@ defmodule TodoBoard.App do
 
   @impl true
   def update(model, msg) do
-    case {model, msg} do
-      {_model, {:resize, resize_data}} ->
+    case {model.mode, msg} do
+      {_mode, {:resize, resize_data}} ->
         Update.window_resize(model, resize_data)
 
-      {_model, {:event, %{ch: ?m}}} ->
+      {_mode, {:event, %{ch: ?m}}} ->
         %{model | debug_overlay: not model.debug_overlay}
 
-      {%{mode: :normal}, {:event, %{key: @enter}}} ->
+      {:normal, {:event, %{key: @enter}}} ->
         panels_with_hovered_panel_selected =
           Enum.map(model.todo_panels, fn
             todo_panel = %{hover: true} -> %{todo_panel | selected: true}
@@ -74,12 +74,12 @@ defmodule TodoBoard.App do
 
         %{model | mode: :panel_selected, todo_panels: panels_with_hovered_panel_selected}
 
-      {%{mode: :panel_selected}, {:event, %{key: @escape}}} ->
+      {:panel_selected, {:event, %{key: @escape}}} ->
         panels_no_selected = Enum.map(model.todo_panels, &%{&1 | selected: false})
 
         %{model | mode: :normal, todo_panels: panels_no_selected}
 
-      {_model, {:event, %{ch: ?p}}} ->
+      {_mode, {:event, %{ch: ?p}}} ->
         panel_elements = Enum.map(model.todos, &%TodoPanel.Element{todo: &1})
 
         new_todo_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
@@ -91,7 +91,7 @@ defmodule TodoBoard.App do
 
         %{model | todo_panels: [new_todo_panel | current_todo_panels]}
 
-      {_model, {:event, %{ch: ?x}}} ->
+      {_mode, {:event, %{ch: ?x}}} ->
         new_todo_panels =
           case model.todo_panels do
             [single_panel] ->
@@ -106,7 +106,7 @@ defmodule TodoBoard.App do
 
         %{model | todo_panels: new_todo_panels}
 
-      {_model, {:event, %{key: key}}} when key in [@arrow_down, @arrow_up] ->
+      {_mode, {:event, %{key: key}}} when key in [@arrow_down, @arrow_up] ->
         todo_panels =
           case key do
             @arrow_down -> panel_hover_shift_forward(model.todo_panels)
@@ -115,7 +115,7 @@ defmodule TodoBoard.App do
 
         %{model | todo_panels: todo_panels}
 
-      {_model, _msg} ->
+      {_mode, _msg} ->
         model
     end
   end

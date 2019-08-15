@@ -31,7 +31,7 @@ defmodule TodoBoard.App do
       window: window
     }
 
-    panel_elements = Enum.map(model.todos, fn todo -> %TodoPanel.Element{todo: todo} end)
+    panel_elements = Enum.map(model.todos, &%TodoPanel.Element{todo: &1})
     starting_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
 
     %{model | todo_panels: [starting_panel]}
@@ -62,7 +62,7 @@ defmodule TodoBoard.App do
         %{model | panel_selected?: true, todo_panels: panels_no_selected}
 
       {_model, {:event, %{ch: ?p}}} ->
-        panel_elements = Enum.map(model.todos, fn todo -> %TodoPanel.Element{todo: todo} end)
+        panel_elements = Enum.map(model.todos, &%TodoPanel.Element{todo: &1})
 
         new_todo_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
 

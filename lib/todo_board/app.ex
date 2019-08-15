@@ -9,7 +9,6 @@ defmodule TodoBoard.App do
 
   import Ratatouille.View
 
-  alias Ratatouille.Runtime.Command
   alias TodoBoard.{Model, TodoPanel}
   alias TodoBoard.App.Update
 
@@ -35,12 +34,7 @@ defmodule TodoBoard.App do
     panel_elements = Enum.map(model.todos, fn todo -> %TodoPanel.Element{todo: todo} end)
     starting_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
 
-    model = %{model | todo_panels: [starting_panel]}
-
-    {
-      model,
-      Command.new(&read_todo_file_lines/0, :todo_file_read)
-    }
+    %{model | todo_panels: [starting_panel]}
   end
 
   @impl true
@@ -48,9 +42,6 @@ defmodule TodoBoard.App do
     case {model, msg} do
       {_model, {:resize, resize_data}} ->
         Update.window_resize(model, resize_data)
-
-      {_model, {:todo_file_read, todo_lines}} ->
-        %{model | todos: todo_lines}
 
       {_model, {:event, %{ch: ?m}}} ->
         %{model | debug_overlay: not model.debug_overlay}

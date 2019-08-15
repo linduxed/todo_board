@@ -79,7 +79,7 @@ defmodule TodoBoard.App do
 
         %{model | mode: :normal, todo_panels: panels_no_selected}
 
-      {_mode, {:event, %{ch: ?p}}} ->
+      {:normal, {:event, %{ch: ?p}}} ->
         panel_elements = Enum.map(model.todos, &%TodoPanel.Element{todo: &1})
 
         new_todo_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
@@ -91,7 +91,7 @@ defmodule TodoBoard.App do
 
         %{model | todo_panels: [new_todo_panel | current_todo_panels]}
 
-      {_mode, {:event, %{ch: ?x}}} ->
+      {:normal, {:event, %{ch: ?x}}} ->
         new_todo_panels =
           case model.todo_panels do
             [single_panel] ->
@@ -106,7 +106,7 @@ defmodule TodoBoard.App do
 
         %{model | todo_panels: new_todo_panels}
 
-      {_mode, {:event, %{key: key}}} when key in [@arrow_down, @arrow_up] ->
+      {:normal, {:event, %{key: key}}} when key in [@arrow_down, @arrow_up] ->
         todo_panels =
           case key do
             @arrow_down -> panel_hover_shift_forward(model.todo_panels)

@@ -83,7 +83,11 @@ defmodule TodoBoard.App do
               table do
                 for element <- todo_panel.elements do
                   table_row do
-                    table_cell(content: element.todo)
+                    table_cell(
+                      attributes: element_attributes(element, todo_panel.selected),
+                      background: element_background(element, todo_panel.selected),
+                      content: element.todo
+                    )
                   end
                 end
               end
@@ -103,6 +107,12 @@ defmodule TodoBoard.App do
   defp panel_color(%TodoPanel{selected: true}), do: :green
   defp panel_color(%TodoPanel{hover: true}), do: :red
   defp panel_color(%TodoPanel{hover: _}), do: nil
+
+  defp element_attributes(%TodoPanel.Element{hover: true}, _panel_selected = true), do: [:bold]
+  defp element_attributes(_element, _panel_selected), do: nil
+
+  defp element_background(%TodoPanel.Element{hover: true}, _panel_selected = true), do: :red
+  defp element_background(_element, _panel_selected), do: nil
 
   defp even_vertical_split_panel_height(%Model{todo_panels: []}), do: nil
 

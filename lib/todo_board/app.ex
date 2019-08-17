@@ -45,8 +45,7 @@ defmodule TodoBoard.App do
       window: window
     }
 
-    panel_elements = Enum.map(model.todos, &%TodoPanel.Element{todo: &1})
-    starting_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
+    starting_panel = TodoPanel.create_from_todos(model.todos, _hover = true)
 
     %{model | todo_panels: [starting_panel]}
   end

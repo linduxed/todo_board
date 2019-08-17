@@ -33,9 +33,7 @@ defmodule TodoBoard.App.Update.Normal do
   end
 
   defp add_panel(model = %Model{}) do
-    panel_elements = Enum.map(model.todos, &%TodoPanel.Element{todo: &1})
-
-    new_todo_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
+    new_todo_panel = TodoPanel.create_from_todos(model.todos, _hover = true)
 
     current_todo_panels =
       Enum.map(model.todo_panels, fn todo_panel ->

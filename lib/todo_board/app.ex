@@ -66,54 +66,22 @@ defmodule TodoBoard.App do
         %{model | debug_overlay: not model.debug_overlay}
 
       {:normal, {:event, %{key: @enter}}} ->
-        panels_with_hovered_panel_selected =
-          Enum.map(model.todo_panels, fn
-            todo_panel = %{hover: true} -> %{todo_panel | selected: true}
-            todo_panel -> todo_panel
-          end)
-
-        %{model | mode: :panel_selected, todo_panels: panels_with_hovered_panel_selected}
+        Update.Normal.select_panel(model)
 
       {:normal, {:event, %{ch: ?p}}} ->
-        panel_elements = Enum.map(model.todos, &%TodoPanel.Element{todo: &1})
-
-        new_todo_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
-
-        current_todo_panels =
-          Enum.map(model.todo_panels, fn todo_panel ->
-            %{todo_panel | hover: false}
-          end)
-
-        %{model | todo_panels: [new_todo_panel | current_todo_panels]}
+        Update.Normal.add_panel(model)
 
       {:normal, {:event, %{ch: ?x}}} ->
-        new_todo_panels =
-          case model.todo_panels do
-            [single_panel] ->
-              [single_panel]
+        Update.Normal.remove_panel(model)
 
-            [%TodoPanel{hover: true} | [first_remaining_panel | rest]] ->
-              [%{first_remaining_panel | hover: true} | rest]
+      {:normal, {:event, %{key: @arrow_up}}} ->
+        Update.Normal.panel_navigate(model, :up)
 
-            [_dropped_panel | rest] ->
-              rest
-          end
-
-        %{model | todo_panels: new_todo_panels}
-
-      {:normal, {:event, %{key: key}}} when key in [@arrow_down, @arrow_up] ->
-        todo_panels =
-          case key do
-            @arrow_down -> panel_hover_shift_forward(model.todo_panels)
-            @arrow_up -> panel_hover_shift_backward(model.todo_panels)
-          end
-
-        %{model | todo_panels: todo_panels}
+      {:normal, {:event, %{key: @arrow_down}}} ->
+        Update.Normal.panel_navigate(model, :down)
 
       {:panel_selected, {:event, %{key: @escape}}} ->
-        panels_no_selected = Enum.map(model.todo_panels, &%{&1 | selected: false})
-
-        %{model | mode: :normal, todo_panels: panels_no_selected}
+        Update.PanelSelected.return_to_normal_mode(model)
 
       {_mode, _msg} ->
         model
@@ -164,39 +132,6 @@ defmodule TodoBoard.App do
          window: %{height: window_height}
        }) do
     floor(window_height / length(todo_panels))
-  end
-
-  defp panel_hover_shift_forward(todo_panels) do
-    panel_hover_shift(todo_panels)
-  end
-
-  defp panel_hover_shift_backward(todo_panels) do
-    todo_panels
-    |> Enum.reverse()
-    |> panel_hover_shift()
-    |> Enum.reverse()
-  end
-
-  defp panel_hover_shift(todo_panels) do
-    panel_hover_shift(todo_panels, false)
-  end
-
-  defp panel_hover_shift(_todo_panels = [], _last_was_hover), do: []
-
-  defp panel_hover_shift(todo_panels = [%TodoPanel{hover: true}], _last_was_hover = false) do
-    todo_panels
-  end
-
-  defp panel_hover_shift([head = %TodoPanel{hover: false} | tail], _last_was_hover = false) do
-    [head | panel_hover_shift(tail, false)]
-  end
-
-  defp panel_hover_shift([head = %TodoPanel{hover: true} | tail], _last_was_hover = false) do
-    [%{head | hover: false} | panel_hover_shift(tail, _last_was_hover = true)]
-  end
-
-  defp panel_hover_shift([head = %TodoPanel{hover: false} | tail], _last_was_hover = true) do
-    [%{head | hover: true} | panel_hover_shift(tail, _last_was_hover = false)]
   end
 
   defp debug_overlay(%Model{debug_overlay: false}), do: nil

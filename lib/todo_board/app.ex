@@ -152,5 +152,6 @@ defmodule TodoBoard.App do
     @todo_file_path
     |> File.read!()
     |> String.split("\n")
+    |> Enum.drop(-1)
   end
 end

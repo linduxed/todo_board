@@ -26,8 +26,12 @@ defmodule TodoBoard.App.Update.Normal do
     panels_with_hovered_panel_selected =
       find_and_update(
         model.todo_panels,
-        _find_fun = &match?(%{hover: true}, &1),
-        _update_fun = &%{&1 | selected: true}
+        _find_fun = fn todo_panel ->
+          match?(%{hover: true}, todo_panel)
+        end,
+        _update_fun = fn todo_panel ->
+          %{todo_panel | selected: true}
+        end
       )
 
     %{model | mode: :panel_selected, todo_panels: panels_with_hovered_panel_selected}

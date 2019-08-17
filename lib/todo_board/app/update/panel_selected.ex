@@ -37,8 +37,12 @@ defmodule TodoBoard.App.Update.PanelSelected do
     todo_panels =
       find_and_update(
         model.todo_panels,
-        _find_fun = &match?(%{selected: true}, &1),
-        _update_fun = &%{&1 | elements: shift_fun.(&1.elements)}
+        _find_fun = fn todo_panel ->
+          match?(%{selected: true}, todo_panel)
+        end,
+        _update_fun = fn todo_panel ->
+          %{todo_panel | elements: shift_fun.(todo_panel.elements)}
+        end
       )
 
     %{model | todo_panels: todo_panels}

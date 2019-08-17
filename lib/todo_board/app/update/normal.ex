@@ -3,9 +3,26 @@ defmodule TodoBoard.App.Update.Normal do
   Update actions for when no panel is selected.
   """
 
+  import Ratatouille.Constants, only: [key: 1]
+
   alias TodoBoard.{Model, TodoPanel}
 
-  def select_panel(model = %Model{}) do
+  @arrow_up key(:arrow_up)
+  @arrow_down key(:arrow_down)
+  @enter key(:enter)
+
+  def update(model = %Model{}, msg) do
+    case msg do
+      {:event, %{key: @enter}} -> select_panel(model)
+      {:event, %{ch: ?p}} -> add_panel(model)
+      {:event, %{ch: ?x}} -> remove_panel(model)
+      {:event, %{key: @arrow_up}} -> panel_navigate(model, :up)
+      {:event, %{key: @arrow_down}} -> panel_navigate(model, :down)
+      _msg -> model
+    end
+  end
+
+  defp select_panel(model = %Model{}) do
     panels_with_hovered_panel_selected =
       Enum.map(model.todo_panels, fn
         todo_panel = %{hover: true} -> %{todo_panel | selected: true}
@@ -15,7 +32,7 @@ defmodule TodoBoard.App.Update.Normal do
     %{model | mode: :panel_selected, todo_panels: panels_with_hovered_panel_selected}
   end
 
-  def add_panel(model = %Model{}) do
+  defp add_panel(model = %Model{}) do
     panel_elements = Enum.map(model.todos, &%TodoPanel.Element{todo: &1})
 
     new_todo_panel = %TodoPanel{elements: panel_elements, hover: true, selected: false}
@@ -28,7 +45,7 @@ defmodule TodoBoard.App.Update.Normal do
     %{model | todo_panels: [new_todo_panel | current_todo_panels]}
   end
 
-  def remove_panel(model = %Model{}) do
+  defp remove_panel(model = %Model{}) do
     new_todo_panels =
       case model.todo_panels do
         [single_panel] ->
@@ -44,13 +61,13 @@ defmodule TodoBoard.App.Update.Normal do
     %{model | todo_panels: new_todo_panels}
   end
 
-  def panel_navigate(model = %Model{}, :up) do
+  defp panel_navigate(model = %Model{}, :up) do
     todo_panels = panel_hover_shift_backward(model.todo_panels)
 
     %{model | todo_panels: todo_panels}
   end
 
-  def panel_navigate(model = %Model{}, :down) do
+  defp panel_navigate(model = %Model{}, :down) do
     todo_panels = panel_hover_shift_forward(model.todo_panels)
 
     %{model | todo_panels: todo_panels}

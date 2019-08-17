@@ -33,11 +33,6 @@ defmodule TodoBoard.App do
 
   @todo_file_path Application.get_env(:todo_board, :todo_file)
 
-  @arrow_up key(:arrow_up)
-  @arrow_down key(:arrow_down)
-  @enter key(:enter)
-  @escape key(:esc)
-
   @impl true
   def init(%{window: window}) do
     todos = read_todo_file_lines()
@@ -65,26 +60,11 @@ defmodule TodoBoard.App do
       {_mode, {:event, %{ch: ?m}}} ->
         %{model | debug_overlay: not model.debug_overlay}
 
-      {:normal, {:event, %{key: @enter}}} ->
-        Update.Normal.select_panel(model)
+      {:normal, _msg} ->
+        Update.Normal.update(model, msg)
 
-      {:normal, {:event, %{ch: ?p}}} ->
-        Update.Normal.add_panel(model)
-
-      {:normal, {:event, %{ch: ?x}}} ->
-        Update.Normal.remove_panel(model)
-
-      {:normal, {:event, %{key: @arrow_up}}} ->
-        Update.Normal.panel_navigate(model, :up)
-
-      {:normal, {:event, %{key: @arrow_down}}} ->
-        Update.Normal.panel_navigate(model, :down)
-
-      {:panel_selected, {:event, %{key: @escape}}} ->
-        Update.PanelSelected.return_to_normal_mode(model)
-
-      {_mode, _msg} ->
-        model
+      {:panel_selected, _msg} ->
+        Update.PanelSelected.update(model, msg)
     end
   end
 

@@ -24,10 +24,11 @@ defmodule TodoBoard.App.Update.Normal do
 
   defp select_panel(model = %Model{}) do
     panels_with_hovered_panel_selected =
-      Enum.map(model.todo_panels, fn
-        todo_panel = %{hover: true} -> %{todo_panel | selected: true}
-        todo_panel -> todo_panel
-      end)
+      find_and_update(
+        model.todo_panels,
+        _find_fun = &match?(%{hover: true}, &1),
+        _update_fun = &%{&1 | selected: true}
+      )
 
     %{model | mode: :panel_selected, todo_panels: panels_with_hovered_panel_selected}
   end
@@ -102,5 +103,10 @@ defmodule TodoBoard.App.Update.Normal do
 
   defp panel_hover_shift([head = %TodoPanel{hover: false} | tail], _last_was_hover = true) do
     [%{head | hover: true} | panel_hover_shift(tail, _last_was_hover = false)]
+  end
+
+  defp find_and_update(list, match_fun, update_fun) do
+    position_to_update = Enum.find_index(list, match_fun)
+    List.update_at(list, position_to_update, update_fun)
   end
 end

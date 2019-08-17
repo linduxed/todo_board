@@ -15,3 +15,11 @@ The application is started with the following command:
 ```bash
 mix run --no-halt
 ```
+
+## Generating documentation
+
+```bash
+mix docs
+```
+
+View the documentation by opening `doc/index.html` in your preferred browser.

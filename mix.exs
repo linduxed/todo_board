@@ -8,6 +8,7 @@ defmodule TodoBoard.MixProject do
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      aliases: aliases(),
       docs: [
         main: "readme",
         extras: ["README.md"]
@@ -27,6 +28,12 @@ defmodule TodoBoard.MixProject do
       {:credo, "~> 1.1", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.21.1", only: :dev, runtime: false},
       {:ratatouille, "~> 0.5.0"}
+    ]
+  end
+
+  defp aliases do
+    [
+      test: "test --no-start"
     ]
   end
 end

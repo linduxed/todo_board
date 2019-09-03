@@ -42,6 +42,7 @@ defmodule TodoBoard.App do
       mode: :normal,
       todos: todos,
       todo_panels: [],
+      todo_panel_hover_index: 0,
       window: window
     }
 

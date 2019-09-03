@@ -65,15 +65,29 @@ defmodule TodoBoard.App.Update.Normal do
   end
 
   defp panel_navigate(model = %Model{}, :up) do
+    new_hover_index = hover_index_shift_up(model.todo_panel_hover_index)
     todo_panels = panel_hover_shift_backward(model.todo_panels)
 
-    %{model | todo_panels: todo_panels}
+    %{model | todo_panels: todo_panels, todo_panel_hover_index: new_hover_index}
   end
 
   defp panel_navigate(model = %Model{}, :down) do
+    new_hover_index = hover_index_shift_down(model.todo_panel_hover_index, model.todo_panels)
     todo_panels = panel_hover_shift_forward(model.todo_panels)
 
-    %{model | todo_panels: todo_panels}
+    %{model | todo_panels: todo_panels, todo_panel_hover_index: new_hover_index}
+  end
+
+  defp hover_index_shift_up(_hover_index = 0), do: 0
+  defp hover_index_shift_up(hover_index), do: hover_index - 1
+
+  defp hover_index_shift_down(hover_index, todo_panels) do
+    index_bottom_boundary = length(todo_panels) - 1
+
+    case hover_index == index_bottom_boundary do
+      true -> hover_index
+      false -> hover_index + 1
+    end
   end
 
   defp panel_hover_shift_forward(todo_panels) do

@@ -24,14 +24,10 @@ defmodule TodoBoard.App.Update.Normal do
 
   defp select_panel(model = %Model{}) do
     panels_with_hovered_panel_selected =
-      find_and_update(
+      List.update_at(
         model.todo_panels,
-        _find_fun = fn todo_panel ->
-          match?(%{hover: true}, todo_panel)
-        end,
-        _update_fun = fn todo_panel ->
-          %{todo_panel | selected: true}
-        end
+        model.todo_panel_hover_index,
+        &%{&1 | selected: true}
       )
 
     %{model | mode: :panel_selected, todo_panels: panels_with_hovered_panel_selected}
@@ -66,14 +62,14 @@ defmodule TodoBoard.App.Update.Normal do
 
   defp panel_navigate(model = %Model{}, :up) do
     new_hover_index = hover_index_shift_up(model.todo_panel_hover_index)
-    todo_panels = panel_hover_shift_backward(model.todo_panels)
+    todo_panels = panel_set_hover(model.todo_panels, new_hover_index)
 
     %{model | todo_panels: todo_panels, todo_panel_hover_index: new_hover_index}
   end
 
   defp panel_navigate(model = %Model{}, :down) do
     new_hover_index = hover_index_shift_down(model.todo_panel_hover_index, model.todo_panels)
-    todo_panels = panel_hover_shift_forward(model.todo_panels)
+    todo_panels = panel_set_hover(model.todo_panels, new_hover_index)
 
     %{model | todo_panels: todo_panels, todo_panel_hover_index: new_hover_index}
   end
@@ -90,41 +86,9 @@ defmodule TodoBoard.App.Update.Normal do
     end
   end
 
-  defp panel_hover_shift_forward(todo_panels) do
-    panel_hover_shift(todo_panels)
-  end
-
-  defp panel_hover_shift_backward(todo_panels) do
+  defp panel_set_hover(todo_panels, hover_index) do
     todo_panels
-    |> Enum.reverse()
-    |> panel_hover_shift()
-    |> Enum.reverse()
-  end
-
-  defp panel_hover_shift(todo_panels) do
-    panel_hover_shift(todo_panels, false)
-  end
-
-  defp panel_hover_shift(_todo_panels = [], _last_was_hover), do: []
-
-  defp panel_hover_shift(todo_panels = [%TodoPanel{hover: true}], _last_was_hover = false) do
-    todo_panels
-  end
-
-  defp panel_hover_shift([head = %TodoPanel{hover: false} | tail], _last_was_hover = false) do
-    [head | panel_hover_shift(tail, false)]
-  end
-
-  defp panel_hover_shift([head = %TodoPanel{hover: true} | tail], _last_was_hover = false) do
-    [%{head | hover: false} | panel_hover_shift(tail, _last_was_hover = true)]
-  end
-
-  defp panel_hover_shift([head = %TodoPanel{hover: false} | tail], _last_was_hover = true) do
-    [%{head | hover: true} | panel_hover_shift(tail, _last_was_hover = false)]
-  end
-
-  defp find_and_update(list, match_fun, update_fun) do
-    position_to_update = Enum.find_index(list, match_fun)
-    List.update_at(list, position_to_update, update_fun)
+    |> Enum.map(&%{&1 | hover: false})
+    |> List.update_at(hover_index, &%{&1 | hover: true})
   end
 end

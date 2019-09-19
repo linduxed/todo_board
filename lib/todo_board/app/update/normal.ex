@@ -34,6 +34,7 @@ defmodule TodoBoard.App.Update.Normal do
   end
 
   defp add_panel(model = %Model{}) do
+    new_hover_index = 0
     new_todo_panel = TodoPanel.create_from_todos(model.todos, _hover = true)
 
     current_todo_panels =
@@ -41,23 +42,25 @@ defmodule TodoBoard.App.Update.Normal do
         %{todo_panel | hover: false}
       end)
 
-    %{model | todo_panels: [new_todo_panel | current_todo_panels]}
+    %{
+      model
+      | todo_panels: [new_todo_panel | current_todo_panels],
+        todo_panel_hover_index: new_hover_index
+    }
   end
 
   defp remove_panel(model = %Model{}) do
+    new_hover_index = 0
+
     new_todo_panels =
-      case model.todo_panels do
-        [single_panel] ->
-          [single_panel]
+      model.todo_panels
+      |> List.delete_at(model.todo_panel_hover_index)
+      |> Enum.map(fn todo_panel -> %{todo_panel | hover: false} end)
+      |> List.update_at(new_hover_index, fn todo_panel ->
+        %{todo_panel | hover: true}
+      end)
 
-        [%TodoPanel{hover: true} | [first_remaining_panel | rest]] ->
-          [%{first_remaining_panel | hover: true} | rest]
-
-        [_dropped_panel | rest] ->
-          rest
-      end
-
-    %{model | todo_panels: new_todo_panels}
+    %{model | todo_panels: new_todo_panels, todo_panel_hover_index: new_hover_index}
   end
 
   defp panel_navigate(model = %Model{}, :up) do

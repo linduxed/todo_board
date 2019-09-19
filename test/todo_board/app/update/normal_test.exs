@@ -174,4 +174,96 @@ defmodule TodoBoard.App.Update.NormalTest do
              }
     end
   end
+
+  describe "update/2 - Add panel" do
+    setup do
+      %{event_add_panel: {:event, %{ch: ?p}}}
+    end
+
+    test "adds panel and adjusts panel hover index", context do
+      model = %Model{
+        debug_overlay: false,
+        mode: :normal,
+        todo_panels: [
+          first_panel = %TodoPanel{
+            elements: [],
+            hover: false,
+            selected: false
+          },
+          second_panel = %TodoPanel{
+            elements: [],
+            hover: true,
+            selected: false
+          }
+        ],
+        todo_panel_hover_index: 1,
+        todos: [],
+        window: %{height: 100, width: 100}
+      }
+
+      new_model = Normal.update(model, context.event_add_panel)
+
+      new_panel = %TodoPanel{
+        elements: [],
+        hover: true,
+        selected: false
+      }
+
+      assert new_model == %{
+               model
+               | mode: :normal,
+                 todo_panels: [
+                   new_panel,
+                   first_panel,
+                   %{second_panel | hover: false}
+                 ],
+                 todo_panel_hover_index: 0
+             }
+    end
+  end
+
+  describe "update/2 - Remove panel" do
+    setup do
+      %{event_remove_panel: {:event, %{ch: ?x}}}
+    end
+
+    test "removes hovered over panel and adjusts panel hover index", context do
+      model = %Model{
+        debug_overlay: false,
+        mode: :normal,
+        todo_panels: [
+          first_panel = %TodoPanel{
+            elements: [],
+            hover: false,
+            selected: false
+          },
+          second_panel = %TodoPanel{
+            elements: [],
+            hover: false,
+            selected: false
+          },
+          _hovered_panel = %TodoPanel{
+            elements: [],
+            hover: true,
+            selected: false
+          }
+        ],
+        todo_panel_hover_index: 2,
+        todos: [],
+        window: %{height: 100, width: 100}
+      }
+
+      new_model = Normal.update(model, context.event_remove_panel)
+
+      assert new_model == %{
+               model
+               | mode: :normal,
+                 todo_panels: [
+                   %{first_panel | hover: true},
+                   second_panel
+                 ],
+                 todo_panel_hover_index: 0
+             }
+    end
+  end
 end

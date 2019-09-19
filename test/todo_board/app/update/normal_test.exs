@@ -6,12 +6,12 @@ defmodule TodoBoard.App.Update.NormalTest do
   alias TodoBoard.App.Update.Normal
   alias TodoBoard.{Model, TodoPanel}
 
-  @arrow_up key(:arrow_up)
-  @arrow_down key(:arrow_down)
-  @enter key(:enter)
-
   describe "update/2 - Panel navigate down" do
-    test "changes `hover` field on panels" do
+    setup do
+      %{event_navigate_down: {:event, %{key: key(:arrow_down)}}}
+    end
+
+    test "changes `hover` field on panels", context do
       model = %Model{
         debug_overlay: false,
         mode: :normal,
@@ -32,7 +32,7 @@ defmodule TodoBoard.App.Update.NormalTest do
         window: %{height: 100, width: 100}
       }
 
-      new_model = Normal.update(model, {:event, %{key: @arrow_down}})
+      new_model = Normal.update(model, context.event_navigate_down)
 
       assert new_model == %{
                model
@@ -44,7 +44,7 @@ defmodule TodoBoard.App.Update.NormalTest do
              }
     end
 
-    test "does nothing if last panel is hovered over" do
+    test "does nothing if last panel is hovered over", context do
       model = %Model{
         debug_overlay: false,
         mode: :normal,
@@ -65,14 +65,18 @@ defmodule TodoBoard.App.Update.NormalTest do
         window: %{height: 100, width: 100}
       }
 
-      new_model = Normal.update(model, {:event, %{key: @arrow_down}})
+      new_model = Normal.update(model, context.event_navigate_down)
 
       assert new_model == model
     end
   end
 
   describe "update/2 - Panel navigate up" do
-    test "changes `hover` field on panels" do
+    setup do
+      %{event_navigate_up: {:event, %{key: key(:arrow_up)}}}
+    end
+
+    test "changes `hover` field on panels", context do
       model = %Model{
         debug_overlay: false,
         mode: :normal,
@@ -93,7 +97,7 @@ defmodule TodoBoard.App.Update.NormalTest do
         window: %{height: 100, width: 100}
       }
 
-      new_model = Normal.update(model, {:event, %{key: @arrow_up}})
+      new_model = Normal.update(model, context.event_navigate_up)
 
       assert new_model == %{
                model
@@ -105,7 +109,7 @@ defmodule TodoBoard.App.Update.NormalTest do
              }
     end
 
-    test "does nothing if first panel is hovered over" do
+    test "does nothing if first panel is hovered over", context do
       model = %Model{
         debug_overlay: false,
         mode: :normal,
@@ -126,14 +130,18 @@ defmodule TodoBoard.App.Update.NormalTest do
         window: %{height: 100, width: 100}
       }
 
-      new_model = Normal.update(model, {:event, %{key: @arrow_up}})
+      new_model = Normal.update(model, context.event_navigate_up)
 
       assert new_model == model
     end
   end
 
   describe "update/2 - Select panel" do
-    test "changes `mode`, and `selected` field on panel" do
+    setup do
+      %{event_select_panel: {:event, %{key: key(:enter)}}}
+    end
+
+    test "changes `mode`, and `selected` field on panel", context do
       model = %Model{
         debug_overlay: false,
         mode: :normal,
@@ -154,7 +162,7 @@ defmodule TodoBoard.App.Update.NormalTest do
         window: %{height: 100, width: 100}
       }
 
-      new_model = Normal.update(model, {:event, %{key: @enter}})
+      new_model = Normal.update(model, context.event_select_panel)
 
       assert new_model == %{
                model

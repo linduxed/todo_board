@@ -6,10 +6,12 @@ defmodule TodoBoard.App.Update.PanelSelectedTest do
   alias TodoBoard.App.Update.PanelSelected
   alias TodoBoard.{Model, TodoPanel}
 
-  @escape key(:esc)
-
   describe "update/2 - Exit to Normal mode" do
-    test "changes `mode` field, and `selected` field on panel" do
+    setup do
+      %{event_exit_to_normal: {:event, %{key: key(:esc)}}}
+    end
+
+    test "changes `mode` field, and `selected` field on panel", context do
       model = %Model{
         debug_overlay: false,
         mode: :panel_selected,
@@ -29,7 +31,7 @@ defmodule TodoBoard.App.Update.PanelSelectedTest do
         window: %{height: 100, width: 100}
       }
 
-      new_model = PanelSelected.update(model, {:event, %{key: @escape}})
+      new_model = PanelSelected.update(model, context.event_exit_to_normal)
 
       assert new_model == %{
                model

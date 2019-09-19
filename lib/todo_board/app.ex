@@ -24,7 +24,7 @@ defmodule TodoBoard.App do
 
   @behaviour Ratatouille.App
 
-  import Ratatouille.Constants, only: [attribute: 1, color: 1, key: 1]
+  import Ratatouille.Constants, only: [attribute: 1, color: 1]
 
   import Ratatouille.View
 

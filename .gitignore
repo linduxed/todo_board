@@ -24,3 +24,6 @@ todo_board-*.tar
 
 # Ignore configuration file, a copy of config/config.exs.sample.
 config/config.exs
+
+# Runtime files, currently sample todo.txt files.
+priv/

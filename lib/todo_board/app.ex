@@ -109,10 +109,14 @@ defmodule TodoBoard.App do
   defp panel_color(%TodoPanel{hover: true}), do: color(:red)
   defp panel_color(%TodoPanel{hover: _}), do: nil
 
-  defp element_attributes(%TodoPanel.Element{hover: true}, _panel_selected = true), do: [attribute(:bold)]
+  defp element_attributes(%TodoPanel.Element{hover: true}, _panel_selected = true),
+    do: [attribute(:bold)]
+
   defp element_attributes(_element, _panel_selected), do: nil
 
-  defp element_background(%TodoPanel.Element{hover: true}, _panel_selected = true), do: color(:red)
+  defp element_background(%TodoPanel.Element{hover: true}, _panel_selected = true),
+    do: color(:red)
+
   defp element_background(_element, _panel_selected), do: nil
 
   defp even_vertical_split_panel_height(%Model{todo_panels: []}), do: nil

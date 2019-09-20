@@ -1,5 +1,6 @@
 defmodule TodoBoard.TodoPanel do
   defstruct elements: [],
+            element_hover_index: 0,
             hover: false,
             selected: false
 
@@ -11,6 +12,7 @@ defmodule TodoBoard.TodoPanel do
 
     %__MODULE__{
       elements: elements,
+      element_hover_index: 0,
       hover: hover,
       selected: false
     }

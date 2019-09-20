@@ -27,62 +27,49 @@ defmodule TodoBoard.App.Update.PanelSelected do
     %{model | mode: :normal, todo_panels: panels_no_selected}
   end
 
-  defp todo_navigate(model = %Model{}, direction) do
-    shift_fun =
-      case direction do
-        :up -> &shift_hover_backward/1
-        :down -> &shift_hover_forward/1
-      end
+  defp todo_navigate(model = %Model{}, direction) when direction in [:up, :down] do
+    new_todo_panels =
+      update_selected_panel(model.todo_panels, fn todo_panel ->
+        new_hover_index = shifted_hover_index(todo_panel, direction)
+        new_elements = move_hover_to(todo_panel.elements, new_hover_index)
 
-    todo_panels =
-      find_and_update(
-        model.todo_panels,
-        _find_fun = fn todo_panel ->
-          match?(%{selected: true}, todo_panel)
-        end,
-        _update_fun = fn todo_panel ->
-          %{todo_panel | elements: shift_fun.(todo_panel.elements)}
-        end
-      )
+        %{todo_panel | elements: new_elements, element_hover_index: new_hover_index}
+      end)
 
-    %{model | todo_panels: todo_panels}
+    %{model | todo_panels: new_todo_panels}
   end
 
-  defp shift_hover_forward(elements) do
-    shift_hover(elements)
+  defp shifted_hover_index(%TodoPanel{elements: []}, _direction), do: 0
+  defp shifted_hover_index(%TodoPanel{element_hover_index: 0}, _direction = :up), do: 0
+
+  defp shifted_hover_index(%TodoPanel{element_hover_index: element_hover_index}, _direction = :up) do
+    element_hover_index - 1
   end
 
-  defp shift_hover_backward(elements) do
+  defp shifted_hover_index(
+         %TodoPanel{elements: elements, element_hover_index: element_hover_index},
+         _direction = :down
+       ) do
+    index_bottom_boundary = length(elements) - 1
+
+    case element_hover_index == index_bottom_boundary do
+      true -> element_hover_index
+      false -> element_hover_index + 1
+    end
+  end
+
+  defp move_hover_to(elements, index) do
     elements
-    |> Enum.reverse()
-    |> shift_hover()
-    |> Enum.reverse()
+    |> Enum.map(&%{&1 | hover: false})
+    |> List.update_at(index, fn todo_panel -> %{todo_panel | hover: true} end)
   end
 
-  defp shift_hover(elements) do
-    shift_hover(elements, false)
-  end
+  defp update_selected_panel(list, update_fun) do
+    position_to_update =
+      Enum.find_index(list, fn todo_panel ->
+        match?(%TodoPanel{selected: true}, todo_panel)
+      end)
 
-  defp shift_hover(_elements = [], _last_was_hover), do: []
-
-  defp shift_hover(elements = [%TodoPanel.Element{hover: true}], _last_was_hover = false) do
-    elements
-  end
-
-  defp shift_hover([head = %TodoPanel.Element{hover: false} | tail], _last_was_hover = false) do
-    [head | shift_hover(tail, false)]
-  end
-
-  defp shift_hover([head = %TodoPanel.Element{hover: true} | tail], _last_was_hover = false) do
-    [%{head | hover: false} | shift_hover(tail, _last_was_hover = true)]
-  end
-
-  defp shift_hover([head = %TodoPanel.Element{hover: false} | tail], _last_was_hover = true) do
-    [%{head | hover: true} | shift_hover(tail, _last_was_hover = false)]
-  end
-
-  defp find_and_update(list, match_fun, update_fun) do
-    position_to_update = Enum.find_index(list, match_fun)
     List.update_at(list, position_to_update, update_fun)
   end
 end

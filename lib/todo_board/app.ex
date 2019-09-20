@@ -81,14 +81,16 @@ defmodule TodoBoard.App do
               height: panel_height,
               color: panel_color(todo_panel)
             ) do
-              table do
-                for element <- todo_panel.elements do
-                  table_row do
-                    table_cell(
-                      attributes: element_attributes(element, todo_panel.selected),
-                      background: element_background(element, todo_panel.selected),
-                      content: element.todo
-                    )
+              viewport(offset_y: offset_for_panel(todo_panel)) do
+                table do
+                  for element <- todo_panel.elements do
+                    table_row do
+                      table_cell(
+                        attributes: element_attributes(element, todo_panel.selected),
+                        background: element_background(element, todo_panel.selected),
+                        content: element.todo
+                      )
+                    end
                   end
                 end
               end
@@ -99,6 +101,10 @@ defmodule TodoBoard.App do
 
       debug_overlay(model)
     end
+  end
+
+  defp offset_for_panel(%TodoPanel{element_hover_index: element_hover_index}) do
+    element_hover_index
   end
 
   defp panel_title(%TodoPanel{elements: elements}) do

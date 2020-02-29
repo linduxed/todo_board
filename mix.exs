@@ -27,6 +27,7 @@ defmodule TodoBoard.MixProject do
     [
       {:credo, "~> 1.1", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.21.1", only: :dev, runtime: false},
+      {:logger_file_backend, "~> 0.0.11"},
       {:ratatouille, "~> 0.5.0"}
     ]
   end

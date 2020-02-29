@@ -3,3 +3,14 @@ use Mix.Config
 config :todo_board,
   todo_file: "#{System.get_env("HOME")}/todo/todo.txt",
   done_file: "#{System.get_env("HOME")}/todo/done.txt"
+
+config :logger,
+  backends: [
+    {LoggerFileBackend, :debug},
+    {LoggerFileBackend, :info},
+    {LoggerFileBackend, :error}
+  ]
+
+config :logger, :debug, path: "log/debug.log", level: :debug
+config :logger, :info, path: "log/info.log", level: :info
+config :logger, :error, path: "log/error.log", level: :error

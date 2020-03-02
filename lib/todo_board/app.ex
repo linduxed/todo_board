@@ -29,13 +29,11 @@ defmodule TodoBoard.App do
   import Ratatouille.View
 
   alias TodoBoard.App.Update
-  alias TodoBoard.{Model, TodoPanel}
-
-  @todo_file_path Application.get_env(:todo_board, :todo_file)
+  alias TodoBoard.{Model, Todo, TodoPanel}
 
   @impl true
   def init(%{window: window}) do
-    todos = read_todo_file_lines()
+    todos = read_todos()
 
     model = %Model{
       debug_overlay: false,
@@ -87,7 +85,7 @@ defmodule TodoBoard.App do
                     table_cell(
                       attributes: element_attributes(element, todo_panel.selected),
                       background: element_background(element, todo_panel.selected),
-                      content: element.todo
+                      content: render_todo(element.todo)
                     )
                   end
                 end
@@ -128,6 +126,10 @@ defmodule TodoBoard.App do
     floor(window_height / length(todo_panels))
   end
 
+  defp render_todo(todo = %Todo{}) do
+    todo.description
+  end
+
   defp debug_overlay(%Model{debug_overlay: false}), do: nil
 
   defp debug_overlay(model = %Model{debug_overlay: true}) do
@@ -153,10 +155,8 @@ defmodule TodoBoard.App do
     end
   end
 
-  defp read_todo_file_lines do
-    @todo_file_path
-    |> File.read!()
-    |> String.split("\n")
-    |> Enum.drop(-1)
+  defp read_todos() do
+    {:ok, todos} = TodoBoard.Repo.TaskWarrior.read_all()
+    todos
   end
 end

@@ -8,12 +8,14 @@ defmodule TodoBoard.Model do
   """
 
   @enforce_keys [
+    :tab,
     :mode,
     :todos,
     :todo_panels,
     :window
   ]
   defstruct [
+    :tab,
     :mode,
     :todos,
     :todo_panels,

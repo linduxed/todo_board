@@ -1,4 +1,4 @@
-defmodule TodoBoard.App.Update.PanelSelected do
+defmodule TodoBoard.App.Listing.Update.PanelSelected do
   @moduledoc """
   Update actions for the cases where a panel has been selected.
   """

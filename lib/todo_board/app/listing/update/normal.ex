@@ -1,4 +1,4 @@
-defmodule TodoBoard.App.Update.Normal do
+defmodule TodoBoard.App.Listing.Update.Normal do
   @moduledoc """
   Update actions for when no panel is selected.
   """

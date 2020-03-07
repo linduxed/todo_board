@@ -28,6 +28,7 @@ defmodule TodoBoard.App do
 
   import Ratatouille.View
 
+  alias TodoBoard.App.Listing
   alias TodoBoard.App.Update
   alias TodoBoard.{Model, Repo, Todo, TodoPanel}
 
@@ -37,6 +38,7 @@ defmodule TodoBoard.App do
 
     model = %Model{
       debug_overlay: false,
+      tab: :listing,
       mode: :normal,
       todos: todos,
       todo_panels: [],
@@ -51,18 +53,15 @@ defmodule TodoBoard.App do
 
   @impl true
   def update(model, msg) do
-    case {model.mode, msg} do
-      {_mode, {:resize, resize_data}} ->
+    case {model.tab, msg} do
+      {_tab, {:resize, resize_data}} ->
         Update.window_resize(model, resize_data)
 
-      {_mode, {:event, %{ch: ?m}}} ->
+      {_tab, {:event, %{ch: ?m}}} ->
         %{model | debug_overlay: not model.debug_overlay}
 
-      {:normal, _msg} ->
-        Update.Normal.update(model, msg)
-
-      {:panel_selected, _msg} ->
-        Update.PanelSelected.update(model, msg)
+      {:listing, _msg} ->
+        Listing.update(model, msg)
     end
   end
 

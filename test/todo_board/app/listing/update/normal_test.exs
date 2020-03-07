@@ -1,9 +1,9 @@
-defmodule TodoBoard.App.Update.NormalTest do
+defmodule TodoBoard.App.Listing.Update.NormalTest do
   use ExUnit.Case, async: true
 
   import Ratatouille.Constants, only: [key: 1]
 
-  alias TodoBoard.App.Update.Normal
+  alias TodoBoard.App.Listing.Update.Normal
   alias TodoBoard.{Model, TodoPanel}
 
   describe "update/2 - Panel navigate down" do
@@ -14,6 +14,7 @@ defmodule TodoBoard.App.Update.NormalTest do
     test "changes `hover` field on panels", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -47,6 +48,7 @@ defmodule TodoBoard.App.Update.NormalTest do
     test "does nothing if last panel is hovered over", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :normal,
         todo_panels: [
           %TodoPanel{
@@ -79,6 +81,7 @@ defmodule TodoBoard.App.Update.NormalTest do
     test "changes `hover` field on panels", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -112,6 +115,7 @@ defmodule TodoBoard.App.Update.NormalTest do
     test "does nothing if first panel is hovered over", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :normal,
         todo_panels: [
           %TodoPanel{
@@ -144,6 +148,7 @@ defmodule TodoBoard.App.Update.NormalTest do
     test "changes `mode`, and `selected` field on panel", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -183,6 +188,7 @@ defmodule TodoBoard.App.Update.NormalTest do
     test "adds panel and adjusts panel hover index", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -230,6 +236,7 @@ defmodule TodoBoard.App.Update.NormalTest do
     test "removes hovered over panel and adjusts panel hover index", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{

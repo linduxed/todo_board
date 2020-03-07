@@ -1,9 +1,9 @@
-defmodule TodoBoard.App.Update.PanelSelectedTest do
+defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
   use ExUnit.Case, async: true
 
   import Ratatouille.Constants, only: [key: 1]
 
-  alias TodoBoard.App.Update.PanelSelected
+  alias TodoBoard.App.Listing.Update.PanelSelected
   alias TodoBoard.{Model, TodoPanel}
 
   describe "update/2 - Exit to Normal mode" do
@@ -14,6 +14,7 @@ defmodule TodoBoard.App.Update.PanelSelectedTest do
     test "changes `mode` field, and `selected` field on panel", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -52,6 +53,7 @@ defmodule TodoBoard.App.Update.PanelSelectedTest do
     test "changes `hover` field on elements, and sets `element_hover_index`", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -93,6 +95,7 @@ defmodule TodoBoard.App.Update.PanelSelectedTest do
     test "does not move `hover` or `element_hover_index` out of bounds", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           %TodoPanel{
@@ -124,6 +127,7 @@ defmodule TodoBoard.App.Update.PanelSelectedTest do
     test "changes `hover` field on elements, and sets `element_hover_index`", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -165,6 +169,7 @@ defmodule TodoBoard.App.Update.PanelSelectedTest do
     test "does not move `hover` or `element_hover_index` out of bounds", context do
       model = %Model{
         debug_overlay: false,
+        tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           %TodoPanel{

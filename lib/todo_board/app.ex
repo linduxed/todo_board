@@ -29,7 +29,7 @@ defmodule TodoBoard.App do
   import Ratatouille.View
 
   alias TodoBoard.App.Update
-  alias TodoBoard.{Model, Todo, TodoPanel}
+  alias TodoBoard.{Model, Repo, Todo, TodoPanel}
 
   @impl true
   def init(%{window: window}) do
@@ -168,8 +168,8 @@ defmodule TodoBoard.App do
     end
   end
 
-  defp read_todos() do
-    {:ok, todos} = TodoBoard.Repo.TaskWarrior.read_all()
+  defp read_todos do
+    {:ok, todos} = Repo.TaskWarrior.read_all()
     todos
   end
 end

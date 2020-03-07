@@ -1,4 +1,10 @@
 defmodule TodoBoard.Todo do
+  @moduledoc """
+  Representation of a TODO item
+
+  Fields represent the subset of data that is currently perceived useful.
+  """
+
   @enforce_keys [
     :description,
     :source_data,

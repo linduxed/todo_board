@@ -1,4 +1,8 @@
 defmodule TodoBoard.TodoPanel do
+  @moduledoc """
+  Main screen component, houses `TodoBoard.Todo` elements
+  """
+
   @enforce_keys [
     :elements,
     :hover,

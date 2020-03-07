@@ -8,7 +8,7 @@ defmodule TodoBoard.Repo.TaskWarrior do
   alias TodoBoard.Todo
 
   @impl true
-  def read_all() do
+  def read_all do
     {json_output, _exit_code = 0} = System.cmd("task", ["export"])
 
     {:ok,

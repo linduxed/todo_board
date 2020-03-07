@@ -127,7 +127,20 @@ defmodule TodoBoard.App do
   end
 
   defp render_todo(todo = %Todo{}) do
-    todo.description
+    project_string =
+      if todo.project do
+        "<" <> "#{todo.project}" <> "> "
+      else
+        ""
+      end
+
+    tag_string =
+      case todo.tags do
+        [] -> ""
+        tags -> "[" <> Enum.join(tags, ", ") <> "] "
+      end
+
+    "#{project_string}#{tag_string}#{todo.description}"
   end
 
   defp debug_overlay(%Model{debug_overlay: false}), do: nil

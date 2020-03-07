@@ -1,8 +1,16 @@
 defmodule TodoBoard.Model do
-  defstruct debug_overlay: false,
-            mode: :normal,
-            todos: [],
-            todo_panels: [],
-            todo_panel_hover_index: 0,
-            window: %{}
+  @enforce_keys [
+    :mode,
+    :todos,
+    :todo_panels,
+    :window
+  ]
+  defstruct [
+    :mode,
+    :todos,
+    :todo_panels,
+    :window,
+    debug_overlay: false,
+    todo_panel_hover_index: 0
+  ]
 end

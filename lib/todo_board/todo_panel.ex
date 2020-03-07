@@ -1,13 +1,20 @@
 defmodule TodoBoard.TodoPanel do
-  defstruct elements: [],
-            element_hover_index: 0,
-            hover: false,
-            selected: false
+  @enforce_keys [
+    :elements,
+    :hover,
+    :selected
+  ]
+  defstruct [
+    :elements,
+    :hover,
+    :selected,
+    element_hover_index: 0
+  ]
 
   def create_from_todos(todos, hover) do
     elements =
       todos
-      |> Enum.map(&%__MODULE__.Element{todo: &1})
+      |> Enum.map(&%__MODULE__.Element{todo: &1, hover: false, selected: false})
       |> List.update_at(0, &%{&1 | hover: true})
 
     %__MODULE__{

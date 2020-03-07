@@ -1,5 +1,4 @@
 defmodule TodoBoard.TodoPanel.Element do
-  defstruct todo: "",
-            hover: false,
-            selected: false
+  @enforce_keys [:todo]
+  defstruct [:todo, :hover, :selected]
 end

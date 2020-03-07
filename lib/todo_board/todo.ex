@@ -1,4 +1,11 @@
 defmodule TodoBoard.Todo do
+  @enforce_keys [
+    :description,
+    :source_data,
+    :status,
+    :tags,
+    :inserted_at
+  ]
   defstruct [
     :description,
     :due_date,

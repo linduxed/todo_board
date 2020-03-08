@@ -7,7 +7,7 @@ defmodule TodoBoard.App.Listing do
   applied.
   """
 
-  alias TodoBoard.App.Listing.Update
+  alias TodoBoard.App.Listing.{Render, Update}
 
   def update(model, msg) do
     case {model.mode, msg} do
@@ -18,4 +18,6 @@ defmodule TodoBoard.App.Listing do
         Update.PanelSelected.update(model, msg)
     end
   end
+
+  defdelegate render(model), to: Render
 end

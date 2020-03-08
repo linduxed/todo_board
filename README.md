@@ -1,6 +1,9 @@
 # TodoBoard
 
-Terminal user interface for viewing `todo.txt` files. Serves as a replacement for [`todo.txt-cli`](https://github.com/ginatrapani/todo.txt-cli/) along with various add-ons for it.
+Terminal user interface for viewing and interacting with TODO systems.
+Currently the backend supported is TaskWarrior.
+
+Originally it was supposed to serve as a replacement for [`todo.txt-cli`](https://github.com/ginatrapani/todo.txt-cli/) along with various add-ons for it.
 
 ## Setup
 

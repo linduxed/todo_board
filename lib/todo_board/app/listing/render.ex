@@ -62,7 +62,8 @@ defmodule TodoBoard.App.Listing.Render do
          todo_panels: todo_panels,
          window: %{height: window_height}
        }) do
-    floor(window_height / length(todo_panels))
+    # Subtract 1 to ensure space for tab listing
+    floor(window_height / length(todo_panels)) - 1
   end
 
   defp render_todo(todo = %Todo{}) do

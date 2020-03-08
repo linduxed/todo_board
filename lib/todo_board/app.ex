@@ -31,6 +31,8 @@ defmodule TodoBoard.App do
   alias TodoBoard.App.Update
   alias TodoBoard.{Model, Repo, TodoPanel}
 
+  @all_tab_names [:listing]
+
   @impl true
   def init(%{window: window}) do
     todos = read_todos()
@@ -71,10 +73,33 @@ defmodule TodoBoard.App do
 
   @impl true
   def render(model) do
-    view do
-      Listing.render(model)
+    view(bottom_bar: status_bar(model)) do
+      case model.tab do
+        :listing -> Listing.render(model)
+      end
 
       debug_overlay(model)
+    end
+  end
+
+  defp status_bar(model) do
+    bar do
+      label do
+        for tab <- @all_tab_names do
+          tab_name = tab |> Atom.to_string() |> String.capitalize()
+          content = " #{tab_name} "
+
+          if tab == model.tab do
+            text(
+              background: :red,
+              color: :white,
+              content: content
+            )
+          else
+            text(content: content)
+          end
+        end
+      end
     end
   end
 

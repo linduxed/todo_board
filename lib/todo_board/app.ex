@@ -24,6 +24,7 @@ defmodule TodoBoard.App do
 
   @behaviour Ratatouille.App
 
+  import Ratatouille.Constants, only: [key: 1]
   import Ratatouille.View
 
   alias TodoBoard.App.Listing
@@ -51,12 +52,17 @@ defmodule TodoBoard.App do
 
   @impl true
   def update(model, msg) do
+    f1 = key(:f1)
+
     case {model.tab, msg} do
       {_tab, {:resize, resize_data}} ->
         Update.window_resize(model, resize_data)
 
       {_tab, {:event, %{ch: ?m}}} ->
         %{model | debug_overlay: not model.debug_overlay}
+
+      {_tab, {:event, %{key: ^f1}}} ->
+        %{model | tab: :listing}
 
       {:listing, _msg} ->
         Listing.update(model, msg)

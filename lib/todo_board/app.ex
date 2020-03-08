@@ -27,11 +27,11 @@ defmodule TodoBoard.App do
   import Ratatouille.Constants, only: [key: 1]
   import Ratatouille.View
 
-  alias TodoBoard.App.Listing
+  alias TodoBoard.App.{Help, Listing}
   alias TodoBoard.App.Update
   alias TodoBoard.{Model, Repo, TodoPanel}
 
-  @all_tab_names [:listing]
+  @all_tab_names [:listing, :help]
 
   @impl true
   def init(%{window: window}) do
@@ -55,6 +55,7 @@ defmodule TodoBoard.App do
   @impl true
   def update(model, msg) do
     f1 = key(:f1)
+    f2 = key(:f2)
 
     case {model.tab, msg} do
       {_tab, {:resize, resize_data}} ->
@@ -66,8 +67,14 @@ defmodule TodoBoard.App do
       {_tab, {:event, %{key: ^f1}}} ->
         %{model | tab: :listing}
 
+      {_tab, {:event, %{key: ^f2}}} ->
+        %{model | tab: :help}
+
       {:listing, _msg} ->
         Listing.update(model, msg)
+
+      {:help, _msg} ->
+        Help.update(model, msg)
     end
   end
 
@@ -76,6 +83,7 @@ defmodule TodoBoard.App do
     view(bottom_bar: status_bar(model)) do
       case model.tab do
         :listing -> Listing.render(model)
+        :help -> Help.render(model)
       end
 
       debug_overlay(model)

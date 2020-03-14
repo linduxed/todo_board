@@ -34,7 +34,8 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
               }
             ],
             todo_panel_hover_index: 0
-          }
+          },
+          rating: %{}
         },
         mode: :normal,
         todos: [],
@@ -77,7 +78,8 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
               }
             ],
             todo_panel_hover_index: 1
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}
@@ -114,7 +116,8 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
               }
             ],
             todo_panel_hover_index: 1
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}
@@ -156,7 +159,8 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
               }
             ],
             todo_panel_hover_index: 0
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}
@@ -193,7 +197,8 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
               }
             ],
             todo_panel_hover_index: 0
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}
@@ -240,7 +245,8 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
               }
             ],
             todo_panel_hover_index: 1
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}
@@ -300,7 +306,8 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
               }
             ],
             todo_panel_hover_index: 2
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}

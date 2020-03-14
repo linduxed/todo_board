@@ -27,12 +27,12 @@ defmodule TodoBoard.App do
   import Ratatouille.Constants, only: [key: 1]
   import Ratatouille.View
 
-  alias TodoBoard.App.{Help, Listing}
+  alias TodoBoard.App.{Help, Listing, Rating}
   alias TodoBoard.App.Update
   alias TodoBoard.App.Base.{Model, TodoPanel}
   alias TodoBoard.Repo
 
-  @all_tab_names [:listing, :help]
+  @all_tab_names [:listing, :rating, :help]
 
   @impl true
   def init(%{window: window}) do
@@ -46,7 +46,8 @@ defmodule TodoBoard.App do
         listing: %{
           todo_panels: [starting_panel],
           todo_panel_hover_index: 0
-        }
+        },
+        rating: :uninitialized
       },
       mode: :normal,
       todos: todos,
@@ -58,6 +59,7 @@ defmodule TodoBoard.App do
   def update(model, msg) do
     f1 = key(:f1)
     f2 = key(:f2)
+    f3 = key(:f3)
 
     case {model.selected_tab, msg} do
       {_tab, {:resize, resize_data}} ->
@@ -70,10 +72,16 @@ defmodule TodoBoard.App do
         %{model | selected_tab: :listing}
 
       {_tab, {:event, %{key: ^f2}}} ->
+        Rating.update(%{model | selected_tab: :rating}, msg)
+
+      {_tab, {:event, %{key: ^f3}}} ->
         %{model | selected_tab: :help}
 
       {:listing, _msg} ->
         Listing.update(model, msg)
+
+      {:rating, _msg} ->
+        Rating.update(model, msg)
 
       {:help, _msg} ->
         Help.update(model, msg)
@@ -85,6 +93,7 @@ defmodule TodoBoard.App do
     view(bottom_bar: status_bar(model)) do
       case model.selected_tab do
         :listing -> Listing.render(model)
+        :rating -> Rating.render(model)
         :help -> Help.render(model)
       end
 

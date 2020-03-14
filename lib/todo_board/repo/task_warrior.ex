@@ -13,7 +13,9 @@ defmodule TodoBoard.Repo.TaskWarrior do
 
     {:ok,
      json_output
-     |> Taskwarrior.from_json()
+     |> Taskwarrior.from_json(
+       udas: [:rating_true, :rating_deviation, :rating_volatility]
+     )
      |> Enum.map(&Todo.build/1)}
   end
 

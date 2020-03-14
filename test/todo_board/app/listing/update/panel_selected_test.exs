@@ -33,7 +33,8 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
                 selected: false
               }
             ]
-          }
+          },
+          rating: %{}
         },
         mode: :panel_selected,
         todos: [],
@@ -93,7 +94,8 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
               },
               second_panel = %TodoPanel{elements: [], hover: false, selected: false}
             ]
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}
@@ -141,7 +143,8 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
               },
               %TodoPanel{elements: [], hover: false, selected: false}
             ]
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}
@@ -190,7 +193,8 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
               },
               second_panel = %TodoPanel{elements: [], hover: false, selected: false}
             ]
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}
@@ -238,7 +242,8 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
               },
               %TodoPanel{elements: [], hover: false, selected: false}
             ]
-          }
+          },
+          rating: %{}
         },
         todos: [],
         window: %{height: 100, width: 100}

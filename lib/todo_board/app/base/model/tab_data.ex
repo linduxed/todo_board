@@ -7,6 +7,6 @@ defmodule TodoBoard.App.Base.Model.TabData do
   next rendering iteration.
   """
 
-  @enforce_keys [:listing]
-  defstruct [:listing]
+  @enforce_keys [:listing, :rating]
+  defstruct [:listing, :rating]
 end

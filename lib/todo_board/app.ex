@@ -29,7 +29,8 @@ defmodule TodoBoard.App do
 
   alias TodoBoard.App.{Help, Listing}
   alias TodoBoard.App.Update
-  alias TodoBoard.{Model, Repo, TodoPanel}
+  alias TodoBoard.App.Base.{Model, TodoPanel}
+  alias TodoBoard.Repo
 
   @all_tab_names [:listing, :help]
 

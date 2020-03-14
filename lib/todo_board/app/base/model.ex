@@ -1,4 +1,4 @@
-defmodule TodoBoard.Model do
+defmodule TodoBoard.App.Base.Model do
   @moduledoc """
   Defines the state of the application
 

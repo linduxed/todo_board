@@ -1,4 +1,4 @@
-defmodule TodoBoard.TodoPanel do
+defmodule TodoBoard.App.Base.TodoPanel do
   @moduledoc """
   Main screen component, houses `TodoBoard.Todo` elements
   """

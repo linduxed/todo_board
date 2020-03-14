@@ -5,7 +5,7 @@ defmodule TodoBoard.App.Listing.Update.Normal do
 
   import Ratatouille.Constants, only: [key: 1]
 
-  alias TodoBoard.{Model, TodoPanel}
+  alias TodoBoard.App.Base.{Model, TodoPanel}
 
   @arrow_up key(:arrow_up)
   @arrow_down key(:arrow_down)

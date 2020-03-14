@@ -6,9 +6,8 @@ defmodule TodoBoard.App.Listing.Render do
   import Ratatouille.Constants, only: [attribute: 1, color: 1]
   import Ratatouille.View
 
-  alias TodoBoard.Model
+  alias TodoBoard.App.Base.{Model, TodoPanel}
   alias TodoBoard.Todo
-  alias TodoBoard.TodoPanel
 
   def render(model) do
     panel_height = even_vertical_split_panel_height(model)

@@ -4,7 +4,7 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
   import Ratatouille.Constants, only: [key: 1]
 
   alias TodoBoard.App.Listing.Update.PanelSelected
-  alias TodoBoard.{Model, TodoPanel}
+  alias TodoBoard.App.Base.{Model, TodoPanel}
 
   describe "update/2 - Exit to Normal mode" do
     setup do

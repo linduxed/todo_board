@@ -1,4 +1,4 @@
-defmodule TodoBoard.TodoPanel.Element do
+defmodule TodoBoard.App.Base.TodoPanel.Element do
   @moduledoc """
   Lines in a `TodoBoard.TodoPanel`
   """

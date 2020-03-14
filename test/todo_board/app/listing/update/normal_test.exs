@@ -4,7 +4,7 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
   import Ratatouille.Constants, only: [key: 1]
 
   alias TodoBoard.App.Listing.Update.Normal
-  alias TodoBoard.{Model, TodoPanel}
+  alias TodoBoard.App.Base.{Model, TodoPanel}
 
   describe "update/2 - Panel navigate down" do
     setup do

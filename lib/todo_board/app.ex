@@ -37,20 +37,17 @@ defmodule TodoBoard.App do
   @impl true
   def init(%{window: window}) do
     todos = read_todos()
+    starting_panel = TodoPanel.create_from_todos(todos, _hover = true)
 
-    model = %Model{
+    %Model{
       debug_overlay: false,
       selected_tab: :listing,
       mode: :normal,
       todos: todos,
-      todo_panels: [],
+      todo_panels: [starting_panel],
       todo_panel_hover_index: 0,
       window: window
     }
-
-    starting_panel = TodoPanel.create_from_todos(model.todos, _hover = true)
-
-    %{model | todo_panels: [starting_panel]}
   end
 
   @impl true

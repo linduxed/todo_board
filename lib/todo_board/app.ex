@@ -40,7 +40,7 @@ defmodule TodoBoard.App do
 
     model = %Model{
       debug_overlay: false,
-      tab: :listing,
+      selected_tab: :listing,
       mode: :normal,
       todos: todos,
       todo_panels: [],
@@ -58,7 +58,7 @@ defmodule TodoBoard.App do
     f1 = key(:f1)
     f2 = key(:f2)
 
-    case {model.tab, msg} do
+    case {model.selected_tab, msg} do
       {_tab, {:resize, resize_data}} ->
         Update.window_resize(model, resize_data)
 
@@ -66,10 +66,10 @@ defmodule TodoBoard.App do
         %{model | debug_overlay: not model.debug_overlay}
 
       {_tab, {:event, %{key: ^f1}}} ->
-        %{model | tab: :listing}
+        %{model | selected_tab: :listing}
 
       {_tab, {:event, %{key: ^f2}}} ->
-        %{model | tab: :help}
+        %{model | selected_tab: :help}
 
       {:listing, _msg} ->
         Listing.update(model, msg)
@@ -82,7 +82,7 @@ defmodule TodoBoard.App do
   @impl true
   def render(model) do
     view(bottom_bar: status_bar(model)) do
-      case model.tab do
+      case model.selected_tab do
         :listing -> Listing.render(model)
         :help -> Help.render(model)
       end
@@ -98,7 +98,7 @@ defmodule TodoBoard.App do
           tab_name = tab |> Atom.to_string() |> String.capitalize()
           content = " #{tab_name} "
 
-          if tab == model.tab do
+          if tab == model.selected_tab do
             text(
               background: :red,
               color: :white,

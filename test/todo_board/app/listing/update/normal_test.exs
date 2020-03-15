@@ -14,7 +14,7 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
     test "changes `hover` field on panels", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -48,7 +48,7 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
     test "does nothing if last panel is hovered over", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :normal,
         todo_panels: [
           %TodoPanel{
@@ -81,7 +81,7 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
     test "changes `hover` field on panels", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -115,7 +115,7 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
     test "does nothing if first panel is hovered over", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :normal,
         todo_panels: [
           %TodoPanel{
@@ -148,7 +148,7 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
     test "changes `mode`, and `selected` field on panel", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -188,7 +188,7 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
     test "adds panel and adjusts panel hover index", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -236,7 +236,7 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
     test "removes hovered over panel and adjusts panel hover index", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :normal,
         todo_panels: [
           first_panel = %TodoPanel{

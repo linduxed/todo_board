@@ -8,14 +8,14 @@ defmodule TodoBoard.App.Base.Model do
   """
 
   @enforce_keys [
-    :tab,
+    :selected_tab,
     :mode,
     :todos,
     :todo_panels,
     :window
   ]
   defstruct [
-    :tab,
+    :selected_tab,
     :mode,
     :todos,
     :todo_panels,

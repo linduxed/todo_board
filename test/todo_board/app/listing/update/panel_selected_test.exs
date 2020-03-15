@@ -14,7 +14,7 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
     test "changes `mode` field, and `selected` field on panel", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -53,7 +53,7 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
     test "changes `hover` field on elements, and sets `element_hover_index`", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -95,7 +95,7 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
     test "does not move `hover` or `element_hover_index` out of bounds", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           %TodoPanel{
@@ -127,7 +127,7 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
     test "changes `hover` field on elements, and sets `element_hover_index`", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           first_panel = %TodoPanel{
@@ -169,7 +169,7 @@ defmodule TodoBoard.App.Listing.Update.PanelSelectedTest do
     test "does not move `hover` or `element_hover_index` out of bounds", context do
       model = %Model{
         debug_overlay: false,
-        tab: :listing,
+        selected_tab: :listing,
         mode: :panel_selected,
         todo_panels: [
           %TodoPanel{

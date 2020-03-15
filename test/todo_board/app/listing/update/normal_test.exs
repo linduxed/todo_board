@@ -6,6 +6,10 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
   alias TodoBoard.App.Listing.Update.Normal
   alias TodoBoard.App.Base.{Model, TodoPanel}
 
+  require Model
+
+  Model.defp__update_tab_data(:listing)
+
   describe "update/2 - Panel navigate down" do
     setup do
       %{event_navigate_down: {:event, %{key: key(:arrow_down)}}}
@@ -15,34 +19,42 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
       model = %Model{
         debug_overlay: false,
         selected_tab: :listing,
-        mode: :normal,
-        todo_panels: [
-          first_panel = %TodoPanel{
-            elements: [],
-            hover: true,
-            selected: false
-          },
-          second_panel = %TodoPanel{
-            elements: [],
-            hover: false,
-            selected: false
+        tab_data: %Model.TabData{
+          listing: %{
+            todo_panels: [
+              first_panel = %TodoPanel{
+                elements: [],
+                hover: true,
+                selected: false
+              },
+              second_panel = %TodoPanel{
+                elements: [],
+                hover: false,
+                selected: false
+              }
+            ],
+            todo_panel_hover_index: 0
           }
-        ],
-        todo_panel_hover_index: 0,
+        },
+        mode: :normal,
         todos: [],
         window: %{height: 100, width: 100}
       }
 
       new_model = Normal.update(model, context.event_navigate_down)
 
-      assert new_model == %{
+      assert new_model ==
                model
-               | todo_panels: [
-                   %{first_panel | hover: false},
-                   %{second_panel | hover: true}
-                 ],
-                 todo_panel_hover_index: 1
-             }
+               |> update_tab_data(fn listing_data ->
+                 %{
+                   listing_data
+                   | todo_panels: [
+                       %{first_panel | hover: false},
+                       %{second_panel | hover: true}
+                     ],
+                     todo_panel_hover_index: 1
+                 }
+               end)
     end
 
     test "does nothing if last panel is hovered over", context do
@@ -50,19 +62,23 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
         debug_overlay: false,
         selected_tab: :listing,
         mode: :normal,
-        todo_panels: [
-          %TodoPanel{
-            elements: [],
-            hover: false,
-            selected: false
-          },
-          %TodoPanel{
-            elements: [],
-            hover: true,
-            selected: false
+        tab_data: %Model.TabData{
+          listing: %{
+            todo_panels: [
+              %TodoPanel{
+                elements: [],
+                hover: false,
+                selected: false
+              },
+              %TodoPanel{
+                elements: [],
+                hover: true,
+                selected: false
+              }
+            ],
+            todo_panel_hover_index: 1
           }
-        ],
-        todo_panel_hover_index: 1,
+        },
         todos: [],
         window: %{height: 100, width: 100}
       }
@@ -83,33 +99,41 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
         debug_overlay: false,
         selected_tab: :listing,
         mode: :normal,
-        todo_panels: [
-          first_panel = %TodoPanel{
-            elements: [],
-            hover: false,
-            selected: false
-          },
-          second_panel = %TodoPanel{
-            elements: [],
-            hover: true,
-            selected: false
+        tab_data: %Model.TabData{
+          listing: %{
+            todo_panels: [
+              first_panel = %TodoPanel{
+                elements: [],
+                hover: false,
+                selected: false
+              },
+              second_panel = %TodoPanel{
+                elements: [],
+                hover: true,
+                selected: false
+              }
+            ],
+            todo_panel_hover_index: 1
           }
-        ],
-        todo_panel_hover_index: 1,
+        },
         todos: [],
         window: %{height: 100, width: 100}
       }
 
       new_model = Normal.update(model, context.event_navigate_up)
 
-      assert new_model == %{
+      assert new_model ==
                model
-               | todo_panels: [
-                   %{first_panel | hover: true},
-                   %{second_panel | hover: false}
-                 ],
-                 todo_panel_hover_index: 0
-             }
+               |> update_tab_data(fn listing_data ->
+                 %{
+                   listing_data
+                   | todo_panels: [
+                       %{first_panel | hover: true},
+                       %{second_panel | hover: false}
+                     ],
+                     todo_panel_hover_index: 0
+                 }
+               end)
     end
 
     test "does nothing if first panel is hovered over", context do
@@ -117,19 +141,23 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
         debug_overlay: false,
         selected_tab: :listing,
         mode: :normal,
-        todo_panels: [
-          %TodoPanel{
-            elements: [],
-            hover: true,
-            selected: false
-          },
-          %TodoPanel{
-            elements: [],
-            hover: false,
-            selected: false
+        tab_data: %Model.TabData{
+          listing: %{
+            todo_panels: [
+              %TodoPanel{
+                elements: [],
+                hover: true,
+                selected: false
+              },
+              %TodoPanel{
+                elements: [],
+                hover: false,
+                selected: false
+              }
+            ],
+            todo_panel_hover_index: 0
           }
-        ],
-        todo_panel_hover_index: 0,
+        },
         todos: [],
         window: %{height: 100, width: 100}
       }
@@ -150,33 +178,40 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
         debug_overlay: false,
         selected_tab: :listing,
         mode: :normal,
-        todo_panels: [
-          first_panel = %TodoPanel{
-            elements: [],
-            hover: true,
-            selected: false
-          },
-          second_panel = %TodoPanel{
-            elements: [],
-            hover: false,
-            selected: false
+        tab_data: %Model.TabData{
+          listing: %{
+            todo_panels: [
+              first_panel = %TodoPanel{
+                elements: [],
+                hover: true,
+                selected: false
+              },
+              second_panel = %TodoPanel{
+                elements: [],
+                hover: false,
+                selected: false
+              }
+            ],
+            todo_panel_hover_index: 0
           }
-        ],
-        todo_panel_hover_index: 0,
+        },
         todos: [],
         window: %{height: 100, width: 100}
       }
 
       new_model = Normal.update(model, context.event_select_panel)
 
-      assert new_model == %{
-               model
-               | mode: :panel_selected,
-                 todo_panels: [
-                   %{first_panel | selected: true},
-                   second_panel
-                 ]
-             }
+      assert new_model ==
+               %{model | mode: :panel_selected}
+               |> update_tab_data(fn listing_data ->
+                 %{
+                   listing_data
+                   | todo_panels: [
+                       %{first_panel | selected: true},
+                       second_panel
+                     ]
+                 }
+               end)
     end
   end
 
@@ -190,19 +225,23 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
         debug_overlay: false,
         selected_tab: :listing,
         mode: :normal,
-        todo_panels: [
-          first_panel = %TodoPanel{
-            elements: [],
-            hover: false,
-            selected: false
-          },
-          second_panel = %TodoPanel{
-            elements: [],
-            hover: true,
-            selected: false
+        tab_data: %Model.TabData{
+          listing: %{
+            todo_panels: [
+              first_panel = %TodoPanel{
+                elements: [],
+                hover: false,
+                selected: false
+              },
+              second_panel = %TodoPanel{
+                elements: [],
+                hover: true,
+                selected: false
+              }
+            ],
+            todo_panel_hover_index: 1
           }
-        ],
-        todo_panel_hover_index: 1,
+        },
         todos: [],
         window: %{height: 100, width: 100}
       }
@@ -215,16 +254,19 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
         selected: false
       }
 
-      assert new_model == %{
+      assert new_model ==
                model
-               | mode: :normal,
-                 todo_panels: [
-                   new_panel,
-                   first_panel,
-                   %{second_panel | hover: false}
-                 ],
-                 todo_panel_hover_index: 0
-             }
+               |> update_tab_data(fn listing_data ->
+                 %{
+                   listing_data
+                   | todo_panels: [
+                       new_panel,
+                       first_panel,
+                       %{second_panel | hover: false}
+                     ],
+                     todo_panel_hover_index: 0
+                 }
+               end)
     end
   end
 
@@ -238,39 +280,46 @@ defmodule TodoBoard.App.Listing.Update.NormalTest do
         debug_overlay: false,
         selected_tab: :listing,
         mode: :normal,
-        todo_panels: [
-          first_panel = %TodoPanel{
-            elements: [],
-            hover: false,
-            selected: false
-          },
-          second_panel = %TodoPanel{
-            elements: [],
-            hover: false,
-            selected: false
-          },
-          _hovered_panel = %TodoPanel{
-            elements: [],
-            hover: true,
-            selected: false
+        tab_data: %Model.TabData{
+          listing: %{
+            todo_panels: [
+              first_panel = %TodoPanel{
+                elements: [],
+                hover: false,
+                selected: false
+              },
+              second_panel = %TodoPanel{
+                elements: [],
+                hover: false,
+                selected: false
+              },
+              _hovered_panel = %TodoPanel{
+                elements: [],
+                hover: true,
+                selected: false
+              }
+            ],
+            todo_panel_hover_index: 2
           }
-        ],
-        todo_panel_hover_index: 2,
+        },
         todos: [],
         window: %{height: 100, width: 100}
       }
 
       new_model = Normal.update(model, context.event_remove_panel)
 
-      assert new_model == %{
+      assert new_model ==
                model
-               | mode: :normal,
-                 todo_panels: [
-                   %{first_panel | hover: true},
-                   second_panel
-                 ],
-                 todo_panel_hover_index: 0
-             }
+               |> update_tab_data(fn listing_data ->
+                 %{
+                   listing_data
+                   | todo_panels: [
+                       %{first_panel | hover: true},
+                       second_panel
+                     ],
+                     todo_panel_hover_index: 0
+                 }
+               end)
     end
   end
 end

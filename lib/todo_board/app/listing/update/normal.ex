@@ -7,6 +7,10 @@ defmodule TodoBoard.App.Listing.Update.Normal do
 
   alias TodoBoard.App.Base.{Model, TodoPanel}
 
+  require Model
+
+  Model.defp__update_tab_data(:listing)
+
   @arrow_up key(:arrow_up)
   @arrow_down key(:arrow_down)
   @enter key(:enter)
@@ -23,58 +27,75 @@ defmodule TodoBoard.App.Listing.Update.Normal do
   end
 
   defp select_panel(model = %Model{}) do
-    panels_with_hovered_panel_selected =
-      List.update_at(
-        model.todo_panels,
-        model.todo_panel_hover_index,
-        &%{&1 | selected: true}
-      )
+    %{model | mode: :panel_selected}
+    |> update_tab_data(fn listing_data ->
+      panels_with_hovered_panel_selected =
+        List.update_at(
+          listing_data.todo_panels,
+          listing_data.todo_panel_hover_index,
+          &%{&1 | selected: true}
+        )
 
-    %{model | mode: :panel_selected, todo_panels: panels_with_hovered_panel_selected}
+      %{listing_data | todo_panels: panels_with_hovered_panel_selected}
+    end)
   end
 
   defp add_panel(model = %Model{}) do
-    new_hover_index = 0
-    new_todo_panel = TodoPanel.create_from_todos(model.todos, _hover = true)
+    model
+    |> update_tab_data(fn listing_data ->
+      new_hover_index = 0
+      new_todo_panel = TodoPanel.create_from_todos(model.todos, _hover = true)
 
-    current_todo_panels =
-      Enum.map(model.todo_panels, fn todo_panel ->
-        %{todo_panel | hover: false}
-      end)
+      current_todo_panels =
+        Enum.map(listing_data.todo_panels, fn todo_panel ->
+          %{todo_panel | hover: false}
+        end)
 
-    %{
-      model
-      | todo_panels: [new_todo_panel | current_todo_panels],
-        todo_panel_hover_index: new_hover_index
-    }
+      %{
+        listing_data
+        | todo_panels: [new_todo_panel | current_todo_panels],
+          todo_panel_hover_index: new_hover_index
+      }
+    end)
   end
 
   defp remove_panel(model = %Model{}) do
-    new_hover_index = 0
+    model
+    |> update_tab_data(fn listing_data ->
+      new_hover_index = 0
 
-    new_todo_panels =
-      model.todo_panels
-      |> List.delete_at(model.todo_panel_hover_index)
-      |> Enum.map(fn todo_panel -> %{todo_panel | hover: false} end)
-      |> List.update_at(new_hover_index, fn todo_panel ->
-        %{todo_panel | hover: true}
-      end)
+      new_todo_panels =
+        listing_data.todo_panels
+        |> List.delete_at(listing_data.todo_panel_hover_index)
+        |> Enum.map(fn todo_panel -> %{todo_panel | hover: false} end)
+        |> List.update_at(new_hover_index, fn todo_panel ->
+          %{todo_panel | hover: true}
+        end)
 
-    %{model | todo_panels: new_todo_panels, todo_panel_hover_index: new_hover_index}
+      %{listing_data | todo_panels: new_todo_panels, todo_panel_hover_index: new_hover_index}
+    end)
   end
 
   defp panel_navigate(model = %Model{}, :up) do
-    new_hover_index = hover_index_shift_up(model.todo_panel_hover_index)
-    todo_panels = panel_set_hover(model.todo_panels, new_hover_index)
+    model
+    |> update_tab_data(fn listing_data ->
+      new_hover_index = hover_index_shift_up(listing_data.todo_panel_hover_index)
+      todo_panels = panel_set_hover(listing_data.todo_panels, new_hover_index)
 
-    %{model | todo_panels: todo_panels, todo_panel_hover_index: new_hover_index}
+      %{listing_data | todo_panels: todo_panels, todo_panel_hover_index: new_hover_index}
+    end)
   end
 
   defp panel_navigate(model = %Model{}, :down) do
-    new_hover_index = hover_index_shift_down(model.todo_panel_hover_index, model.todo_panels)
-    todo_panels = panel_set_hover(model.todo_panels, new_hover_index)
+    model
+    |> update_tab_data(fn listing_data ->
+      new_hover_index =
+        hover_index_shift_down(listing_data.todo_panel_hover_index, listing_data.todo_panels)
 
-    %{model | todo_panels: todo_panels, todo_panel_hover_index: new_hover_index}
+      todo_panels = panel_set_hover(listing_data.todo_panels, new_hover_index)
+
+      %{listing_data | todo_panels: todo_panels, todo_panel_hover_index: new_hover_index}
+    end)
   end
 
   defp hover_index_shift_up(_hover_index = 0), do: 0

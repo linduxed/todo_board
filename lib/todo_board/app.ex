@@ -42,10 +42,14 @@ defmodule TodoBoard.App do
     %Model{
       debug_overlay: false,
       selected_tab: :listing,
+      tab_data: %Model.TabData{
+        listing: %{
+          todo_panels: [starting_panel],
+          todo_panel_hover_index: 0
+        }
+      },
       mode: :normal,
       todos: todos,
-      todo_panels: [starting_panel],
-      todo_panel_hover_index: 0,
       window: window
     }
   end

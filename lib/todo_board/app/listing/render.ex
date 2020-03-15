@@ -14,7 +14,7 @@ defmodule TodoBoard.App.Listing.Render do
 
     row do
       column(size: 12) do
-        for todo_panel <- model.todo_panels do
+        for todo_panel <- model.tab_data.listing.todo_panels do
           panel(
             title: panel_title(todo_panel),
             height: panel_height,
@@ -55,10 +55,14 @@ defmodule TodoBoard.App.Listing.Render do
 
   defp element_background(_element, _panel_selected), do: nil
 
-  defp even_vertical_split_panel_height(%Model{todo_panels: []}), do: nil
+  defp even_vertical_split_panel_height(%Model{tab_data: %{listing: %{todo_panels: []}}}), do: nil
 
   defp even_vertical_split_panel_height(%Model{
-         todo_panels: todo_panels,
+         tab_data: %{
+           listing: %{
+             todo_panels: todo_panels
+           }
+         },
          window: %{height: window_height}
        }) do
     # Subtract 1 to ensure space for tab listing

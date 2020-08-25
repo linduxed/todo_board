@@ -29,7 +29,7 @@ defmodule TodoBoard.MixProject do
       {:ex_doc, "~> 0.21.1", only: :dev, runtime: false},
       {:logger_file_backend, "~> 0.0.11"},
       {:ratatouille, "~> 0.5.0"},
-      {:taskwarrior, "~> 0.2.1"}
+      {:taskwarrior, "~> 0.4"}
     ]
   end
 

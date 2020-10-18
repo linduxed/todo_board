@@ -146,6 +146,7 @@ defmodule TodoBoard.App.Rating.Update.NormalTest do
                  |> put_in([:choice], :draw)
                end)
     end
+
     test "does nothing if draw button is hovered over", context do
       todos = Factory.build_list(3, :todo, %{status: "pending"})
 
@@ -166,11 +167,42 @@ defmodule TodoBoard.App.Rating.Update.NormalTest do
     end
   end
 
-  describe "update/2 - Choose hovered over todo" do
+  describe "update/2 - Confirm choice of todo" do
     setup do
       %{event_choose_todo: {:event, %{key: key(:space)}}}
     end
 
-    test "updates ratings of competing todos"
+    test "updates ratings of competing todos and selects new todos", context do
+      todos = Factory.build_list(3, :todo, %{status: "pending"})
+
+      model =
+        Factory.build(:model,
+          rating_tab_data:
+            Factory.build(
+              :rating_tab_data,
+              choice: :draw,
+              todos: todos
+            ),
+          todos: todos
+        )
+
+      new_model = Normal.update(model, context.event_choose_todo)
+
+      new_tab_data = new_model.tab_data.rating
+
+      assert new_tab_data.left.hover == false
+      assert new_tab_data.right.hover == false
+      assert new_tab_data.draw.hover == false
+      assert new_tab_data.choice == :none
+
+      ratings_sorted_by_uuid = fn todos ->
+        todos
+        |> Enum.sort_by(& &1.uuid)
+        |> Enum.map(&{&1.uuid, &1.rating})
+      end
+
+      assert ratings_sorted_by_uuid.(model.todos) !=
+               ratings_sorted_by_uuid.(new_model.todos)
+    end
   end
 end

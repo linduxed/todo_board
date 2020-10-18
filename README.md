@@ -1,7 +1,7 @@
 # TodoBoard
 
 Terminal user interface for viewing and interacting with TODO systems.
-Currently the backend supported is TaskWarrior.
+Currently the backend supported is Taskwarrior.
 
 Originally it was supposed to serve as a replacement for [`todo.txt-cli`](https://github.com/ginatrapani/todo.txt-cli/) along with various add-ons for it.
 

@@ -1,4 +1,4 @@
-defmodule TodoBoard.Repo.TaskWarrior do
+defmodule TodoBoard.Repo.Taskwarrior do
   @moduledoc """
   Enables read/write interaction with the Taskwarrior utility
   """
@@ -20,7 +20,7 @@ defmodule TodoBoard.Repo.TaskWarrior do
   end
 
   @impl true
-  def write_all(_list) do
+  def write_all(todos) do
     :ok
   end
 end

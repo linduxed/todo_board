@@ -148,7 +148,7 @@ defmodule TodoBoard.App do
   end
 
   defp read_todos do
-    {:ok, todos} = Repo.TaskWarrior.read_all()
+    {:ok, todos} = Repo.Taskwarrior.read_all()
     todos
   end
 end
